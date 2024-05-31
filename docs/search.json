@@ -7,6 +7,41 @@
     "text": "This is a post with executable code.\n\n\nShow the code\n1 + 1\n\n\n[1] 2"
   },
   {
+    "objectID": "posts/post-with-code/bill.html",
+    "href": "posts/post-with-code/bill.html",
+    "title": "Billboard Top 100’s in 2000",
+    "section": "",
+    "text": "This analysis focuses on the Billboard Top 100 chart from the year 2000, particularly examining the #1 hit singles that stayed at the top position the longest. Using data manipulation and visualization techniques in R, we can gain insights into the music trends of that year and identify the most dominant songs and artists."
+  },
+  {
+    "objectID": "posts/post-with-code/bill.html#libraries-and-data-preparation",
+    "href": "posts/post-with-code/bill.html#libraries-and-data-preparation",
+    "title": "Billboard Top 100’s in 2000",
+    "section": "Libraries and Data Preparation",
+    "text": "Libraries and Data Preparation\nWe start by loading the necessary R libraries for data manipulation, visualization, and analysis.\n\n\nShow the code\nlibrary(tidyverse)   # For data manipulation and visualization\nlibrary(lubridate)   # For date manipulation\nlibrary(skimr)       # For summarizing data\nlibrary(survival)    # For survival analysis (not used in this example)\nlibrary(survminer)   # For visualizing survival analysis (not used in this example)\nlibrary(flextable)   # For creating flexible tables\nlibrary(DT)          # For interactive tables\n\n\nThe billboard dataset is reshaped to gather weekly rankings into a long format, making it easier to filter and analyze the data.\n\n\nShow the code\n# Load the dataset\ndata(\"billboard\", package = \"tidyverse\") # Ensure you have the billboard dataset loaded\nds = billboard\n\n# Reshape the data from wide to long format\nds = billboard %>% gather(key = week, value = rank, wk1:wk76)\n\n# Convert week column to numeric and ensure rank is numeric\nds$week = as.numeric(gsub(\"wk\", \"\", ds$week))\nds$rank = as.numeric(ds$rank)"
+  },
+  {
+    "objectID": "posts/post-with-code/bill.html#filtering-and-summarizing-data",
+    "href": "posts/post-with-code/bill.html#filtering-and-summarizing-data",
+    "title": "Billboard Top 100’s in 2000",
+    "section": "Filtering and Summarizing Data",
+    "text": "Filtering and Summarizing Data\nWe filter the dataset to include only the rows where the song was ranked #1. Then, we group by artist and track to count the number of weeks each song stayed at the top position.\n\n\nShow the code\n# Filter for #1 ranked songs and summarize the duration at #1\nds = ds %>%\n  filter(rank == 1) %>%\n  group_by(artist, track) %>%\n  summarize(weeksAtNumberOne = n()) %>%\n  arrange(desc(weeksAtNumberOne))\n\n# Display the summarized data as a flextable\nas_flextable(ds)\n\n\n\nartisttrackweeksAtNumberOnecharactercharacterintegerDestiny's ChildIndependent Women Pa...11SantanaMaria, Maria10Aguilera, ChristinaCome On Over Baby (A...4MadonnaMusic4Savage GardenI Knew I Loved You4Destiny's ChildSay My Name3Iglesias, EnriqueBe With You3JanetDoesn't Really Matte...3Aguilera, ChristinaWhat A Girl Wants2LonestarAmazed2n: 17\n\n\nWe use the flextable library to create a flexible and visually appealing table that displays the artists and tracks along with the number of weeks they stayed at #1."
+  },
+  {
+    "objectID": "posts/post-with-code/bill.html#additional-visualizations",
+    "href": "posts/post-with-code/bill.html#additional-visualizations",
+    "title": "Billboard Top 100’s in 2000",
+    "section": "Additional Visualizations",
+    "text": "Additional Visualizations\n\n\nShow the code\n# Summarize total weeks at #1 for each artist\nartist_summary <- ds %>%\n  group_by(artist) %>%\n  summarize(totalWeeksAtNumberOne = sum(weeksAtNumberOne)) %>%\n  arrange(desc(totalWeeksAtNumberOne))\n\n# Bar chart of top artists by total weeks at #1\nggplot(artist_summary, aes(x = reorder(artist, totalWeeksAtNumberOne), y = totalWeeksAtNumberOne)) +\n  geom_bar(stat = \"identity\", fill = \"steelblue\") +\n  coord_flip() +\n  labs(title = \"Top Artists by Total Weeks at #1 in 2000\", x = \"Artist\", y = \"Total Weeks at #1\") +\n  theme_minimal()\n\n\n\n\n\n\n\nShow the code\n# Histogram of weeks at #1\nggplot(ds, aes(x = weeksAtNumberOne)) +\n  geom_histogram(binwidth = 1, fill = \"darkorange\", color = \"black\") +\n  labs(title = \"Distribution of Weeks at #1\", x = \"Weeks at #1\", y = \"Count of Songs\") +\n  theme_minimal()\n\n\n\n\n\n\n\nShow the code\n# Interactive data table\ndatatable(ds, options = list(pageLength = 10, autoWidth = TRUE),\n          caption = 'Number of Weeks Each Song Stayed at #1 in 2000')"
+  },
+  {
+    "objectID": "posts/post-with-code/bill.html#conclusion",
+    "href": "posts/post-with-code/bill.html#conclusion",
+    "title": "Billboard Top 100’s in 2000",
+    "section": "Conclusion",
+    "text": "Conclusion\nThis analysis provides a clear view of the songs that dominated the Billboard Top 100 charts in the year 2000. By identifying the tracks that remained at #1 the longest, we can better understand the music trends and preferences of that time. This type of analysis can be expanded to include other years or additional chart metrics to gain further insights into the evolution of popular music."
+  },
+  {
     "objectID": "posts/welcome/index.html",
     "href": "posts/welcome/index.html",
     "title": "Welcome To My Blog",
@@ -18,7 +53,7 @@
     "href": "index.html",
     "title": "CorDarryl Hall’s Data Portfolio",
     "section": "",
-    "text": "Post With Code\n\n\n\nnews\n\n\ncode\n\n\nanalysis\n\n\n\n\n\n\n\nHarlow Malloc\n\n\nMay 31, 2024\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nWelcome To My Blog\n\n\n\nnews\n\n\n\n\n\n\n\nTristan O’Malley\n\n\nMay 28, 2024\n\n\n\n\n\n\n\n\nNo matching items"
+    "text": "Billboard Top 100’s in 2000\n\n\n\nTime Series Analysis\n\n\nData Analysis\n\n\nData Science\n\n\nData Visualization\n\n\nTrend Analysis\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nPost With Code\n\n\n\nnews\n\n\ncode\n\n\nanalysis\n\n\n\n\n\n\n\nHarlow Malloc\n\n\nMay 31, 2024\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nWelcome To My Blog\n\n\n\nnews\n\n\n\n\n\n\n\nTristan O’Malley\n\n\nMay 28, 2024\n\n\n\n\n\n\n\n\nNo matching items"
   },
   {
     "objectID": "about.html",
@@ -26,5 +61,495 @@
     "title": "About",
     "section": "",
     "text": "About this blog"
+  },
+  {
+    "objectID": "Untitled.io/post-with-code/interactive.html",
+    "href": "Untitled.io/post-with-code/interactive.html",
+    "title": "Fortune 1000 Companies",
+    "section": "",
+    "text": "Welcome to the analysis of the Fortune 1000 Companies. The Fortune 1000 list ranks the top companies in the United States based on their total revenue. In this analysis, we’ll explore the top 10 companies by revenue and gain insights into their performance and market dominance."
+  },
+  {
+    "objectID": "Untitled.io/post-with-code/interactive.html#top-10-companies-by-revenue",
+    "href": "Untitled.io/post-with-code/interactive.html#top-10-companies-by-revenue",
+    "title": "Fortune 1000 Companies",
+    "section": "Top 10 Companies by Revenue",
+    "text": "Top 10 Companies by Revenue\nLet’s start by examining the top 10 companies by revenue:\n\n\n\nTop 10 companies by revenue\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\ncompany\nrank\nrank_change\nrevenue\nprofit\nnum. of employees\nsector\ncity\nstate\nnewcomer\nceo_founder\nceo_woman\nprofitable\nprev_rank\nCEO\nWebsite\nTicker\nMarket Cap\n\n\n\n\nWalmart\n1\n0\n572754.0\n13673.0\n2300000\nRetailing\nBentonville\nAR\nno\nno\nno\nyes\n1\nC. Douglas McMillon\nhttps://www.stock.walmart.com\nWMT\n352037\n\n\nAmazon\n2\n0\n469822.0\n33364.0\n1608000\nRetailing\nSeattle\nWA\nno\nno\nno\nyes\n2\nAndrew R. Jassy\nwww.amazon.com\nAMZN\n1202717\n\n\nApple\n3\n0\n365817.0\n94680.0\n154000\nTechnology\nCupertino\nCA\nno\nno\nno\nyes\n3\nTimothy D. Cook\nwww.apple.com\nAAPL\n2443962\n\n\nCVS Health\n4\n0\n292111.0\n7910.0\n258000\nHealth Care\nWoonsocket\nRI\nno\nno\nyes\nyes\n4\nKaren Lynch\nhttps://www.cvshealth.com\nCVS\n125204\n\n\nUnitedHealth Group\n5\n0\n287597.0\n17285.0\n350000\nHealth Care\nMinnetonka\nMN\nno\nno\nno\nyes\n5\nAndrew P. Witty\nwww.unitedhealthgroup.com\nUNH\n500468\n\n\nExxon Mobil\n6\n4\n285640.0\n23040.0\n63000\nEnergy\nIrving\nTX\nno\nno\nno\nyes\n10\nDarren W. Woods\nwww.exxonmobil.com\nXOM\n371841\n\n\nBerkshire Hathaway\n7\n-1\n276094.0\n89795.0\n372000\nFinancials\nOmaha\nNE\nno\nno\nno\nyes\n6\nWarren E. Buffett\nwww.berkshirehathaway.com\nBRKA\n625468\n\n\nAlphabet\n8\n1\n257637.0\n76033.0\n156500\nTechnology\nMountain View\nCA\nno\nno\nno\nyes\n9\nSundar Pichai\nhttps://www.abc.xyz\nGOOGL\n1309359\n\n\nMcKesson\n9\n-2\n238228.0\n-4539.0\n67500\nHealth Care\nIrving\nTX\nno\nno\nno\nno\n7\nBrian S. Tyler\nwww.mckesson.com\nMCK\n47377\n\n\nAmerisourceBergen\n10\n-2\n213988.8\n1539.9\n40000\nHealth Care\nConshohocken\nPA\nno\nno\nno\nyes\n8\nSteven H. Collis\nwww.amerisourcebergen.com\nABC\n29972"
+  },
+  {
+    "objectID": "Untitled.io/post-with-code/interactive.html#revenue-distribution-of-top-10-companies",
+    "href": "Untitled.io/post-with-code/interactive.html#revenue-distribution-of-top-10-companies",
+    "title": "Fortune 1000 Companies",
+    "section": "Revenue Distribution of Top 10 Companies",
+    "text": "Revenue Distribution of Top 10 Companies\nNext, let’s visualize the revenue distribution of the top 10 companies using an interactive plot:"
+  },
+  {
+    "objectID": "Untitled.io/post-with-code/interactive.html#key-insights-and-analysis",
+    "href": "Untitled.io/post-with-code/interactive.html#key-insights-and-analysis",
+    "title": "Fortune 1000 Companies",
+    "section": "Key Insights and Analysis",
+    "text": "Key Insights and Analysis\n\nRevenue Dominance of Top 10 Companies\nThe top 10 Fortune companies exhibit significant dominance in terms of revenue generation. Companies like Apple, Amazon, and Walmart consistently rank among the top revenue earners, highlighting their strong market position and competitive advantage.\n\n\nRevenue Growth Trends\nAnalyzing the revenue trends over time reveals interesting insights into the performance of these companies. While some companies demonstrate steady growth year over year, others may experience fluctuations due to various factors such as economic conditions, industry trends, and strategic decisions.\n\n\nIndustry Representation\nThe top 10 companies represent a diverse range of industries, including technology, retail, finance, and healthcare. This diversification reflects the dynamic nature of the business landscape and underscores the importance of innovation and adaptability in maintaining market leadership."
+  },
+  {
+    "objectID": "Untitled.io/post-with-code/interactive.html#conclusion",
+    "href": "Untitled.io/post-with-code/interactive.html#conclusion",
+    "title": "Fortune 1000 Companies",
+    "section": "Conclusion",
+    "text": "Conclusion\nIn conclusion, the analysis of the Fortune 1000 Companies provides valuable insights into the revenue dynamics and market trends among the top-performing companies. By understanding the revenue distribution, growth trends, and industry representation, stakeholders can make informed decisions and strategies to navigate the competitive landscape effectively."
+  },
+  {
+    "objectID": "Untitled.io/post-with-code/Wine.html",
+    "href": "Untitled.io/post-with-code/Wine.html",
+    "title": "Wine & Feature Engineering",
+    "section": "",
+    "text": "In this analysis, we will generate a comprehensive set of 10 features derived from the wine dataset, which includes the points feature. Through the process of feature engineering, we will select and transform variables to create meaningful features that enhance the predictive power of our model. This involves consolidating similar categories using functions like fct_lump and ensuring that our dataset is clean by removing any rows with missing values. Additionally, we will transform the price variable into its logarithmic form (log(price)) to stabilize the variance and normalize the distribution, facilitating a more effective linear regression model.\n\n\nShow the code\nknitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)\nlibrary(tidyverse)\nlibrary(caret)\nlibrary(fastDummies)\nwine = read_rds(\"/Users/Shared/Data 505/wine.rds\")"
+  },
+  {
+    "objectID": "Untitled.io/post-with-code/Wine.html#feature-engineering",
+    "href": "Untitled.io/post-with-code/Wine.html#feature-engineering",
+    "title": "Wine & Feature Engineering",
+    "section": "Feature Engineering",
+    "text": "Feature Engineering\nSummary\nIn this section, we will create a total of 10 features, including the points feature, from the wine dataset. We will also remove all rows that contain any missing values to ensure the data is clean and complete. Finally, we will transform the price into its logarithmic form and ensure that only the log-transformed price (log(price)) and the selected features remain in the final dataframe, which we will call wino.\n\n\nShow the code\nwino <- wine %>%\n  mutate(lprice = log(price)) %>%\n  mutate(country = fct_lump(country, 5),\n         taster_name = fct_lump(taster_name, 5),\n         variety = fct_lump(variety, 5),\n         winery = fct_lump(winery, 5),\n         region_1 = fct_lump(region_1, 5),\n         province = fct_lump(province, 5),\n         designation = fct_lump(designation, 5)) %>%\n  select(lprice, points, country, taster_name, variety, winery, region_1, province, designation) %>%\n  drop_na()"
+  },
+  {
+    "objectID": "Untitled.io/post-with-code/Wine.html#model-training-with-caret",
+    "href": "Untitled.io/post-with-code/Wine.html#model-training-with-caret",
+    "title": "Wine & Feature Engineering",
+    "section": "Model Training with Caret",
+    "text": "Model Training with Caret\nSummary\nThis section focuses on using the Caret library to partition the wino dataframe into an 80% training set and a 20% test set. We will perform a linear regression with bootstrap resampling and report the Root Mean Squared Error (RMSE) for the model on the test set. The bootstrap method involves resampling with replacement, which helps in estimating the accuracy of the model.\n\n\nShow the code\nset.seed(504)\nwine_index <- createDataPartition(wino$lprice, p = 0.8, list = FALSE)\nwino_tr <- wino[wine_index, ]\nwino_te <- wino[-wine_index, ]\n\ncontrol <- trainControl(method = \"boot\", number = 5)\nm1 <- train(lprice ~ ., \n            data = wino_tr, \n            method = \"lm\",\n            trControl = control)\n\nprint(m1$resample)\n\n\n       RMSE  Rsquared       MAE  Resample\n1 0.4716720 0.4639796 0.3669938 Resample1\n2 0.4735139 0.4531511 0.3691902 Resample2\n3 0.4682085 0.4532082 0.3652813 Resample3\n4 0.4724564 0.4578321 0.3690610 Resample4\n5 0.4718331 0.4647390 0.3683953 Resample5\n\n\nShow the code\nwine_pred <- predict(m1, wino_te)\npostResample(pred = wine_pred, obs = wino_te$lprice)\n\n\n     RMSE  Rsquared       MAE \n0.4716279 0.4453607 0.3677621"
+  },
+  {
+    "objectID": "Untitled.io/post-with-code/Wine.html#variable-selection",
+    "href": "Untitled.io/post-with-code/Wine.html#variable-selection",
+    "title": "Wine & Feature Engineering",
+    "section": "Variable Selection",
+    "text": "Variable Selection\nSummary\nIn this section, we will identify and visualize the importance of the selected features in our model. The goal is to understand which features have the most significant impact on predicting the log-transformed price of the wine.\n\n\nShow the code\nimportance <- varImp(m1, scale = TRUE)\nplot(importance)"
+  },
+  {
+    "objectID": "Untitled.io/post-with-code/Wine.html#data-partition",
+    "href": "Untitled.io/post-with-code/Wine.html#data-partition",
+    "title": "Wine & Feature Engineering",
+    "section": "Data Partition",
+    "text": "Data Partition\nSummary\nTo ensure reproducibility, we will set the seed to 504 before partitioning the data into training and test sets. We will aim to achieve an RMSE on the test data of less than 0.47 for 1 point, less than 0.46 for 2 points, or less than 0.45 for 3 points. This ensures that the model’s performance is both robust and reproducible.\n\n\nShow the code\nset.seed(504)\nwine_pred <- predict(m1, wino_te)\npostResample(pred = wine_pred, obs = wino_te$lprice)\n\n\n     RMSE  Rsquared       MAE \n0.4716279 0.4453607 0.3677621"
+  },
+  {
+    "objectID": "Untitled.io/post-with-code/Wine.html#conclusion",
+    "href": "Untitled.io/post-with-code/Wine.html#conclusion",
+    "title": "Wine & Feature Engineering",
+    "section": "Conclusion:",
+    "text": "Conclusion:\nThis presentation demonstrated the process of feature engineering, model training using the Caret library, and evaluating the model’s performance. Key steps included creating features, handling missing data, partitioning the dataset, and assessing the model using RMSE. The importance of reproducibility in data partitioning and model evaluation was emphasized through the use of set.seed."
+  },
+  {
+    "objectID": "Untitled.io/post-with-code/GoT.html",
+    "href": "Untitled.io/post-with-code/GoT.html",
+    "title": "Survival Analysis of Game of Thrones Characters",
+    "section": "",
+    "text": "This survival analysis was conducted on a Game of Thrones dataset to analyze the expected survival time of characters. The analysis includes visualizing the survival probability by initial allegiance and whether the characters switched allegiances."
+  },
+  {
+    "objectID": "Untitled.io/post-with-code/GoT.html#dataset-overview",
+    "href": "Untitled.io/post-with-code/GoT.html#dataset-overview",
+    "title": "Survival Analysis of Game of Thrones Characters",
+    "section": "Dataset Overview",
+    "text": "Dataset Overview\nThe dataset contains information about Game of Thrones characters, including their allegiance, survival time, and whether they switched allegiances.\n\n\nShow the code\n# Load necessary libraries and dataset\nlibrary(tidyverse)\n\n\n── Attaching packages ─────────────────────────────────────── tidyverse 1.3.2 ──\n✔ ggplot2 3.4.0     ✔ purrr   1.0.0\n✔ tibble  3.2.1     ✔ dplyr   1.1.1\n✔ tidyr   1.2.1     ✔ stringr 1.5.0\n✔ readr   2.1.3     ✔ forcats 0.5.2\n── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──\n✖ dplyr::filter() masks stats::filter()\n✖ dplyr::lag()    masks stats::lag()\n\n\nShow the code\nlibrary(lubridate)\n\n\nLoading required package: timechange\n\nAttaching package: 'lubridate'\n\nThe following objects are masked from 'package:base':\n\n    date, intersect, setdiff, union\n\n\nShow the code\nlibrary(survival)\nlibrary(survminer)\n\n\nLoading required package: ggpubr\n\nAttaching package: 'survminer'\n\nThe following object is masked from 'package:survival':\n\n    myeloma\n\n\nShow the code\nthePath <- \"/Users/Shared/Survival Analysis/Got_dataset\"\nds <- read_csv(paste(thePath, \"character_data_S01-S08.csv\", sep = \"/\"))\n\n\nNew names:\nRows: 359 Columns: 41\n── Column specification\n──────────────────────────────────────────────────────── Delimiter: \",\" chr\n(8): name, dth_description, icd10_dx_code, icd10_dx_text, icd10_cause_c... dbl\n(27): id, sex, religion, occupation, social_status, allegiance_last, all... lgl\n(6): ...36, ...37, ...38, ...39, ...40, ...41\nℹ Use `spec()` to retrieve the full column specification for this data. ℹ\nSpecify the column types or set `show_col_types = FALSE` to quiet this message.\n• `` -> `...36`\n• `` -> `...37`\n• `` -> `...38`\n• `` -> `...39`\n• `` -> `...40`\n• `` -> `...41`"
+  },
+  {
+    "objectID": "Untitled.io/post-with-code/GoT.html#survival-analysis-by-allegiance",
+    "href": "Untitled.io/post-with-code/GoT.html#survival-analysis-by-allegiance",
+    "title": "Survival Analysis of Game of Thrones Characters",
+    "section": "Survival Analysis by Allegiance",
+    "text": "Survival Analysis by Allegiance\n\nCharacters Loyal to Their Allegiances\n\n\nShow the code\n# Filter data for characters loyal to their allegiances\ncharacter_ds_2_1 <- ds %>%\n  filter(allegiance_switched == 1 & allegiance_last %in% 1:4)\n\n# Fit survival model\nno_switch <- survfit(Surv(character_ds_2_1$exp_time_hrs, character_ds_2_1$dth_flag) ~ character_ds_2_1$allegiance_last)\n\n# Plot survival curves\nsurv_loyal <- ggsurvplot(fit = no_switch, data = character_ds_2_1,\n                         legend = \"bottom\", \n                         legend.title = \"Allegiance\",\n                         legend.labs = c(\"Stark\", \"Targaryen\", \"Night's Watch\", \"Lannister\"),\n                         risk.table = F, conf.int = F) +\n              labs(title = \"Survival of Characters Loyal to Their Allegiances\",\n                   x = \"Time in Hours\")\nsurv_loyal\n\n\n\n\n\n\n\nCharacters Not Loyal to Their Allegiances\n\n\nShow the code\n# Filter data for characters not loyal to their allegiances\ncharacter_swap <- ds %>%\n  filter(allegiance_switched == 2 & allegiance_last %in% 1:4)\n\n# Fit survival model\nswitch <- survfit(Surv(character_swap$exp_time_hrs, character_swap$dth_flag) ~ character_swap$allegiance_last)\n\n# Plot survival curves\nsurv_not_loyal <- ggsurvplot(fit = switch, data = character_swap,\n                             legend = \"bottom\", \n                             legend.title = \"Allegiance\",\n                             legend.labs = c(\"Stark\", \"Targaryen\", \"Night's Watch\", \"Lannister\"),\n                             risk.table = F, conf.int = F) +\n                  labs(title = \"Survival of Characters Not Loyal to Their Allegiances\",\n                       x = \"Time in Hours\")\nsurv_not_loyal\n\n\n\n\n\nComparison of Survival Curves\n\n\nShow the code\n# Compare survival curves for characters who switched allegiances and those who didn't\nallegiance_switch <- survfit(Surv(ds$exp_time_hrs, ds$dth_flag) ~ ds$allegiance_switched)\n\n# Plot survival curves\nallegiance_switch2 <- ggsurvplot(fit = allegiance_switch, data = ds,\n                                 legend = \"bottom\", \n                                 legend.title = \"Swapped Allegiance?\",\n                                 legend.labs = c(\"Yes\", \"No\"),\n                                 risk.table = F, conf.int = T) +\n                      labs(title = \"Survival Curves for Characters who Swapped/Kept Allegiance\",\n                           x = \"Time to Death (Hours)\")\nallegiance_switch2\n\n\n\n\n\nOverall Survival Curve for Game of Thrones Characters\n\n\nShow the code\n# Fit overall survival model\nkm2 <- survfit(Surv(time = ds$exp_time_hrs, event = ds$dth_flag) ~ 1)\n\n# Plot overall survival curve\ngot_surv <- ggsurvplot(fit = km2, data = ds,\n                       legend = \"bottom\", \n                       legend.title = \"GoT Characters\",\n                       risk.table = F, conf.int = F, surv.median.line = \"hv\") +\n            labs(title = \"Survival Curve for Game of Thrones Characters\",\n                 x = \"Time to Death (Hours)\")\ngot_surv"
+  },
+  {
+    "objectID": "Untitled.io/post-with-code/GoT.html#key-insights-analysis",
+    "href": "Untitled.io/post-with-code/GoT.html#key-insights-analysis",
+    "title": "Survival Analysis of Game of Thrones Characters",
+    "section": "Key Insights & Analysis:",
+    "text": "Key Insights & Analysis:\n1. Survival by Allegiance:\nCharacters loyal to their allegiances, such as Stark, Targaryen, Night’s Watch, and Lannister, tend to have higher survival rates compared to those who switch allegiances.\nThe survival curves for characters loyal to their allegiances show relatively higher probabilities of survival over time.\n2. Effect of Allegiance Switching:\nCharacters who switch allegiances exhibit different survival patterns compared to those who remain loyal.\nThe survival curves for characters who switched allegiances demonstrate varying probabilities of survival, depending on their new allegiance.\n3. Overall Survival:\nThe overall survival curve for Game of Thrones characters provides a comprehensive view of the survival probability across all allegiances.\nIt showcases the general trend of character survival throughout the series, highlighting critical periods of high mortality.\n4. Comparative Analysis:\nComparing survival curves between characters who remained loyal and those who switched allegiances offers insights into the impact of allegiance on survival outcomes.\nStatistical tests, such as the log-rank test, can be employed to determine significant differences in survival between various allegiance groups.\n5. Character-Specific Analysis:\nFurther analysis can be conducted to explore survival patterns for specific characters or character groups, considering factors like gender, age, and storyline involvement.\nExamining survival trends for prominent characters can reveal narrative arcs and thematic elements influencing survival outcomes.\n6. Implications for Plot and Storytelling:\nSurvival analysis offers a unique perspective on narrative dynamics, character development, and plot progression within the Game of Thrones universe.\nUnderstanding survival patterns can shed light on the storytelling decisions made by authors and the thematic elements driving character fates."
+  },
+  {
+    "objectID": "Untitled.io/post-with-code/GoT.html#conclusion",
+    "href": "Untitled.io/post-with-code/GoT.html#conclusion",
+    "title": "Survival Analysis of Game of Thrones Characters",
+    "section": "Conclusion",
+    "text": "Conclusion\nBy combining statistical techniques with narrative analysis, this survival analysis provides valuable insights into the complex world of Game of Thrones, uncovering patterns of allegiance, betrayal, and survival that shape the story’s rich tapestry."
+  },
+  {
+    "objectID": "Untitled.io/post-with-code/powerbi.html",
+    "href": "Untitled.io/post-with-code/powerbi.html",
+    "title": "Offer Analysis Dashboard",
+    "section": "",
+    "text": "This Power BI Summary is a real-life example that I created for a previous organization. This dashboard was designed to provide an overview of key performance indicators (KPIs) and metrics that were relevant to the organization’s goals and objectives.\n\n\n\nSummary: This metric measures the acceptance rate of job offers among different specialized groups, calculated monthly.\nKey Insights: Higher acceptance rates indicate successful alignment between job offers and candidate expectations.\nLower acceptance rates suggest potential areas needing improvement in the recruitment process.\n\n\n\n\nSummary: This metric tracks the rate at which job offers are declined among different specialized groups, calculated monthly.\nKey Insights: Helps identify why certain groups decline offers more frequently, such as mismatches between job requirements and candidate skills or issues with compensation packages.\nProvides data for proactive adjustments in recruitment strategies.\n\n\n\n\nSummary: This metric measures how competitive the organization’s job offers are compared to the market, based on pay grade and job description/category.\nKey Insights: A low score indicates the need for salary adjustments to attract top talent.\nA high score suggests that the organization’s offers are competitive, aiding in talent attraction and retention."
+  },
+  {
+    "objectID": "Untitled.io/post-with-code/powerbi.html#conclusion",
+    "href": "Untitled.io/post-with-code/powerbi.html#conclusion",
+    "title": "Offer Analysis Dashboard",
+    "section": "Conclusion",
+    "text": "Conclusion\n\nKey Takeaways:\nThe Offer Accept Ratio and Offer Decline Ratio metrics offer crucial insights into the recruitment process, highlighting the effectiveness of job offers and areas for improvement.\nSalary Competitiveness is essential for understanding the organization’s position in the job market, ensuring competitive compensation packages.\nThe interactive dashboard design allows for in-depth analysis and informed decision-making across various organizational facets.\nContinuous monitoring of these metrics enables the organization to adapt strategies, enhance performance, improve recruitment efforts, and maintain a competitive edge in the market."
+  },
+  {
+    "objectID": "Untitled.io/post-with-code/powerbila.html",
+    "href": "Untitled.io/post-with-code/powerbila.html",
+    "title": "Labor Utilization Dashboard",
+    "section": "",
+    "text": "This section provides an overview of labor utilization, including the number of hours worked, productivity levels, labor costs, and overtime expenses. It also details the types of work performed, helping management make informed decisions about staffing and resource allocation.\nInsight: High productivity levels are observed in teams involved in project-specific tasks.\nAnalysis: This information can guide decisions on optimizing workforce allocation and improving productivity."
+  },
+  {
+    "objectID": "Untitled.io/post-with-code/powerbila.html#labor-application-resources",
+    "href": "Untitled.io/post-with-code/powerbila.html#labor-application-resources",
+    "title": "Labor Utilization Dashboard",
+    "section": "Labor Application Resources",
+    "text": "Labor Application Resources\nThis tab includes detailed resource utilization tables, presenting data on hours worked, productivity levels, labor costs, and overtime expenses.\nInsight: Certain projects are consuming more labor hours than planned, impacting overall productivity.\nAnalysis: Detailed tables help in pinpointing projects that require additional resources or process improvements."
+  },
+  {
+    "objectID": "Untitled.io/post-with-code/powerbila.html#labor-application-details",
+    "href": "Untitled.io/post-with-code/powerbila.html#labor-application-details",
+    "title": "Labor Utilization Dashboard",
+    "section": "Labor Application Details",
+    "text": "Labor Application Details\nThis tab provides detailed resource utilization data summarized by Project & Resource Groups, offering insights into labor distribution and effectiveness.\nInsight: Resource groups focused on high-impact projects show better utilization rates.\nAnalysis: Summarized data helps in evaluating the efficiency of resource deployment across various projects."
+  },
+  {
+    "objectID": "Untitled.io/post-with-code/powerbila.html#conclusion",
+    "href": "Untitled.io/post-with-code/powerbila.html#conclusion",
+    "title": "Labor Utilization Dashboard",
+    "section": "Conclusion",
+    "text": "Conclusion\nThis Power BI Dashboard is an invaluable tool for managing labor utilization, providing detailed insights that are essential for optimizing workforce efficiency and productivity. The Labor Application Summary section offers a comprehensive overview of labor utilization, including the number of hours worked, productivity levels, labor costs, and overtime expenses. High productivity levels are particularly noted in teams working on project-specific tasks. This information is crucial for guiding decisions on staffing and resource allocation, ensuring that the organization can enhance productivity through strategic workforce management.\nIn the Labor Application Resources tab, detailed tables present critical data on hours worked, productivity, labor costs, and overtime expenses. Insights from this section reveal that certain projects are consuming more labor hours than initially planned, impacting overall productivity. By pinpointing these projects, management can identify areas that require additional resources or process improvements, facilitating more effective labor utilization.\nThe Labor Application Details tab provides a granular view of resource utilization data summarized by Project and Resource Groups. It highlights that resource groups focused on high-impact projects demonstrate better utilization rates. This summarized data is instrumental in evaluating the efficiency of resource deployment across various projects, allowing the organization to make informed decisions to optimize labor distribution and effectiveness.\nOverall, the detailed visual summaries and insights provided by the Power BI Dashboard enable the organization to monitor labor utilization meticulously, identify trends, and implement data-driven strategies for workforce optimization. This comprehensive approach ensures that labor resources are effectively managed, contributing to improved productivity and operational efficiency"
+  },
+  {
+    "objectID": "Untitled.io/post-with-code/le.html",
+    "href": "Untitled.io/post-with-code/le.html",
+    "title": "Expected Population Growth (Inspired by TidyTuesday dataset)",
+    "section": "",
+    "text": "This analysis examines the total figures for the global population, focusing on how the size of the population is expected to evolve in different regions and countries of the world."
+  },
+  {
+    "objectID": "Untitled.io/post-with-code/le.html#overview",
+    "href": "Untitled.io/post-with-code/le.html#overview",
+    "title": "Expected Population Growth (Inspired by TidyTuesday dataset)",
+    "section": "Overview",
+    "text": "Overview\n\n\nShow the code\nlibrary(tidyverse)\n\n\n── Attaching packages ─────────────────────────────────────── tidyverse 1.3.2 ──\n✔ ggplot2 3.4.0     ✔ purrr   1.0.0\n✔ tibble  3.2.1     ✔ dplyr   1.1.1\n✔ tidyr   1.2.1     ✔ stringr 1.5.0\n✔ readr   2.1.3     ✔ forcats 0.5.2\n── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──\n✖ dplyr::filter() masks stats::filter()\n✖ dplyr::lag()    masks stats::lag()\n\n\nShow the code\nlibrary(lubridate)\n\n\nLoading required package: timechange\n\nAttaching package: 'lubridate'\n\nThe following objects are masked from 'package:base':\n\n    date, intersect, setdiff, union\n\n\nShow the code\nlibrary(skimr)\nlibrary(survival)\nlibrary(survminer)\n\n\nLoading required package: ggpubr\n\nAttaching package: 'survminer'\n\nThe following object is masked from 'package:survival':\n\n    myeloma\n\n\nShow the code\nlibrary(plotly)\n\n\n\nAttaching package: 'plotly'\n\nThe following object is masked from 'package:ggplot2':\n\n    last_plot\n\nThe following object is masked from 'package:stats':\n\n    filter\n\nThe following object is masked from 'package:graphics':\n\n    layout\n\n\nShow the code\nlibrary(DT)\n\n# Load the data\nthePath <- \"/Users/cordarrylhall/CorDarryl Hall Data Portfolio/CorDarryl Hall Data Portfolio\"\nds <- read_csv(paste(thePath, \"Projections-of-the-world-population-until-2100-by-the-Wittgenstein-Centre.csv\", sep=\"/\"))\n\n\nRows: 189 Columns: 4\n── Column specification ────────────────────────────────────────────────────────\nDelimiter: \",\"\nchr (2): Entity, Code\ndbl (2): Year, PopulationTotal_SSP2\n\nℹ Use `spec()` to retrieve the full column specification for this data.\nℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.\n\n\nShow the code\n# Display basic info about the data\nnames(ds)\n\n\n[1] \"Entity\"               \"Code\"                 \"Year\"                \n[4] \"PopulationTotal_SSP2\"\n\n\nShow the code\nhead(ds)\n\n\n# A tibble: 6 × 4\n  Entity Code   Year PopulationTotal_SSP2\n  <chr>  <chr> <dbl>                <dbl>\n1 Africa <NA>   1970            368002720\n2 Africa <NA>   1975            420166976\n3 Africa <NA>   1980            482569664\n4 Africa <NA>   1985            553231936\n5 Africa <NA>   1990            634977088\n6 Africa <NA>   1995            720581760\n\n\nShow the code\nskim(ds)\n\n\n\nData summary\n\n\nName\nds\n\n\nNumber of rows\n189\n\n\nNumber of columns\n4\n\n\n_______________________\n\n\n\nColumn type frequency:\n\n\n\ncharacter\n2\n\n\nnumeric\n2\n\n\n________________________\n\n\n\nGroup variables\nNone\n\n\n\nVariable type: character\n\n\n\n\n\n\n\n\n\n\n\n\n\nskim_variable\nn_missing\ncomplete_rate\nmin\nmax\nempty\nn_unique\nwhitespace\n\n\n\n\nEntity\n0\n1.00\n4\n31\n0\n7\n0\n\n\nCode\n162\n0.14\n8\n8\n0\n1\n0\n\n\n\nVariable type: numeric\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nskim_variable\nn_missing\ncomplete_rate\nmean\nsd\np0\np25\np50\np75\np100\nhist\n\n\n\n\nYear\n0\n1\n2035\n3.90500e+01\n1970\n2000\n2035\n2070\n2100\n▇▇▇▇▇\n\n\nPopulationTotal_SSP2\n0\n1\n2184638392\n2.72418e+09\n19334460\n425366016\n737849088\n3680742912\n9397164032\n▇▁▂▁▁"
+  },
+  {
+    "objectID": "Untitled.io/post-with-code/le.html#key-insights",
+    "href": "Untitled.io/post-with-code/le.html#key-insights",
+    "title": "Expected Population Growth (Inspired by TidyTuesday dataset)",
+    "section": "Key Insights",
+    "text": "Key Insights\nPopulation Growth by Region: Different regions are expected to experience varying rates of population growth.\nTop Growing Regions: Identify the regions with the highest expected population growth.\nDistribution of Population Growth: Understanding the distribution and density of expected population growth across different regions."
+  },
+  {
+    "objectID": "Untitled.io/post-with-code/le.html#interactive-boxplot-of-expected-population-growth-by-region",
+    "href": "Untitled.io/post-with-code/le.html#interactive-boxplot-of-expected-population-growth-by-region",
+    "title": "Expected Population Growth (Inspired by TidyTuesday dataset)",
+    "section": "Interactive Boxplot of Expected Population Growth by Region",
+    "text": "Interactive Boxplot of Expected Population Growth by Region\n\n\nShow the code\n# Interactive boxplot\nplot_ly(ds, x = ~Entity, y = ~PopulationTotal_SSP2, type = 'box', name = 'Population') %>%\n  layout(title = \"Expected Population Growth by Region\",\n         xaxis = list(title = \"Region\"),\n         yaxis = list(title = \"Population\"))"
+  },
+  {
+    "objectID": "Untitled.io/post-with-code/le.html#expected-population-growth-by-region-histogram",
+    "href": "Untitled.io/post-with-code/le.html#expected-population-growth-by-region-histogram",
+    "title": "Expected Population Growth (Inspired by TidyTuesday dataset)",
+    "section": "Expected Population Growth by Region (Histogram)",
+    "text": "Expected Population Growth by Region (Histogram)\n\n\nShow the code\n# Histogram of expected population growth\np <- ds %>%\n  ggplot(aes(x = PopulationTotal_SSP2, fill = Entity)) +\n  geom_histogram(color = \"black\", bins = 20) +\n  ggtitle(\"Expected Population Growth by Region\") +\n  facet_wrap(. ~ Entity) +\n  theme_minimal()\n\nggplotly(p)"
+  },
+  {
+    "objectID": "Untitled.io/post-with-code/le.html#trend-analysis-population-growth-over-time",
+    "href": "Untitled.io/post-with-code/le.html#trend-analysis-population-growth-over-time",
+    "title": "Expected Population Growth (Inspired by TidyTuesday dataset)",
+    "section": "Trend Analysis: Population Growth Over Time",
+    "text": "Trend Analysis: Population Growth Over Time\n\n\nShow the code\n# Line plot for population growth over time\ntrend_plot <- ds %>%\n  ggplot(aes(x = Year, y = PopulationTotal_SSP2, color = Entity)) +\n  geom_line() +\n  ggtitle(\"Population Growth Over Time by Region\") +\n  xlab(\"Year\") +\n  ylab(\"Population\") +\n  theme_minimal()\n\nggplotly(trend_plot)"
+  },
+  {
+    "objectID": "Untitled.io/post-with-code/le.html#comparative-analysis",
+    "href": "Untitled.io/post-with-code/le.html#comparative-analysis",
+    "title": "Expected Population Growth (Inspired by TidyTuesday dataset)",
+    "section": "Comparative Analysis",
+    "text": "Comparative Analysis\n\n\nShow the code\n# Compare population growth in top regions\ntop_regions <- ds %>%\n  group_by(Entity) %>%\n  summarize(Total_Population = sum(PopulationTotal_SSP2)) %>%\n  arrange(desc(Total_Population)) %>%\n  head(10)\n\ndatatable(top_regions, options = list(pageLength = 5, autoWidth = TRUE))"
+  },
+  {
+    "objectID": "Untitled.io/post-with-code/le.html#detailed-analysis",
+    "href": "Untitled.io/post-with-code/le.html#detailed-analysis",
+    "title": "Expected Population Growth (Inspired by TidyTuesday dataset)",
+    "section": "Detailed Analysis",
+    "text": "Detailed Analysis\n\n\nShow the code\n# Regional breakdown plot\nregional_breakdown <- ds %>%\n  ggplot(aes(x = Entity, y = PopulationTotal_SSP2, fill = Entity)) +\n  geom_col() +\n  coord_flip() +\n  ggtitle(\"Regional Breakdown of Expected Population Growth\") +\n  xlab(\"Region\") +\n  ylab(\"Total Population\") +\n  theme_minimal()\n\nprint(regional_breakdown)"
+  },
+  {
+    "objectID": "Untitled.io/post-with-code/le.html#conclusion",
+    "href": "Untitled.io/post-with-code/le.html#conclusion",
+    "title": "Expected Population Growth (Inspired by TidyTuesday dataset)",
+    "section": "Conclusion",
+    "text": "Conclusion\nThe analysis provides insights into the expected population growth across various regions and countries. By leveraging interactive visualizations, trend analysis, and comparative studies, we can better understand the global population dynamics and prepare for future demographic shifts.\nFeel free to explore the interactive elements and delve deeper into the analysis"
+  },
+  {
+    "objectID": "Untitled.io/post-with-code/sank.html",
+    "href": "Untitled.io/post-with-code/sank.html",
+    "title": "Country Migration",
+    "section": "",
+    "text": "This document presents an analysis of the number of people migrating from one country (left) to another (right). The interactive Sankey diagram below visualizes these migration flows, offering insights into the patterns and volume of migration between different countries."
+  },
+  {
+    "objectID": "Untitled.io/post-with-code/sank.html#overview",
+    "href": "Untitled.io/post-with-code/sank.html#overview",
+    "title": "Country Migration",
+    "section": "Overview",
+    "text": "Overview\n\n\nShow the code\nlibrary(tidyverse)\n\n\n── Attaching packages ─────────────────────────────────────── tidyverse 1.3.2 ──\n✔ ggplot2 3.4.0     ✔ purrr   1.0.0\n✔ tibble  3.2.1     ✔ dplyr   1.1.1\n✔ tidyr   1.2.1     ✔ stringr 1.5.0\n✔ readr   2.1.3     ✔ forcats 0.5.2\n── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──\n✖ dplyr::filter() masks stats::filter()\n✖ dplyr::lag()    masks stats::lag()\n\n\nShow the code\nlibrary(viridis)\n\n\nLoading required package: viridisLite\n\n\nShow the code\nlibrary(patchwork)\nlibrary(hrbrthemes)\n\n\nNOTE: Either Arial Narrow or Roboto Condensed fonts are required to use these themes.\n      Please use hrbrthemes::import_roboto_condensed() to install Roboto Condensed and\n      if Arial Narrow is not on your system, please see https://bit.ly/arialnarrow\n\n\nShow the code\nlibrary(circlize)\n\n\n========================================\ncirclize version 0.4.15\nCRAN page: https://cran.r-project.org/package=circlize\nGithub page: https://github.com/jokergoo/circlize\nDocumentation: https://jokergoo.github.io/circlize_book/book/\n\nIf you use it in published research, please cite:\nGu, Z. circlize implements and enhances circular visualization\n  in R. Bioinformatics 2014.\n\nThis message can be suppressed by:\n  suppressPackageStartupMessages(library(circlize))\n========================================\n\n\nShow the code\nlibrary(networkD3)\n\n# Load and prepare the data\ndata <- read.table(\"https://raw.githubusercontent.com/holtzy/data_to_viz/master/Example_dataset/13_AdjacencyDirectedWeighted.csv\", header=TRUE)\ndata_long <- data %>%\n  rownames_to_column() %>%\n  gather(key = 'key', value = 'value', -rowname) %>%\n  filter(value > 0)\ncolnames(data_long) <- c(\"source\", \"target\", \"value\")\ndata_long$target <- paste(data_long$target, \" \", sep=\"\")\n\n# Create nodes\nnodes <- data.frame(name=c(as.character(data_long$source), as.character(data_long$target)) %>% unique())\n\n# Create source and target IDs\ndata_long$IDsource <- match(data_long$source, nodes$name) - 1\ndata_long$IDtarget <- match(data_long$target, nodes$name) - 1\n\n# Define color scale\nColourScal <- 'd3.scaleOrdinal().range([\"#FDE725FF\",\"#B4DE2CFF\",\"#6DCD59FF\",\"#35B779FF\",\"#1F9E89FF\",\"#26828EFF\",\"#31688EFF\",\"#3E4A89FF\",\"#482878FF\",\"#440154FF\"])'\n\n# Create the Sankey diagram\nsankeyNetwork(Links = data_long, Nodes = nodes,\n              Source = \"IDsource\", Target = \"IDtarget\",\n              Value = \"value\", NodeID = \"name\", \n              sinksRight=FALSE, colourScale=ColourScal, nodeWidth=40, fontSize=13, nodePadding=20)"
+  },
+  {
+    "objectID": "Untitled.io/post-with-code/sank.html#key-insights",
+    "href": "Untitled.io/post-with-code/sank.html#key-insights",
+    "title": "Country Migration",
+    "section": "Key Insights",
+    "text": "Key Insights\nMigration Patterns: Observe which countries are the most common sources and destinations for migrants.\nVolume of Migration: Identify the countries with the highest number of migrants.\nRegional Trends: Analyze the regional trends and how migration flows vary between different parts of the world."
+  },
+  {
+    "objectID": "Untitled.io/post-with-code/sank.html#detailed-analysis",
+    "href": "Untitled.io/post-with-code/sank.html#detailed-analysis",
+    "title": "Country Migration",
+    "section": "Detailed Analysis",
+    "text": "Detailed Analysis\nTo dive deeper into the data, we use various visualization techniques and data summarizations:\n\nMigration Flows\n\n\nShow the code\n# Plot migration flows\nlibrary(ggplot2)\n\nmigration_flow <- data_long %>%\n  ggplot(aes(x=source, y=value, fill=target)) +\n  geom_bar(stat=\"identity\") +\n  theme_minimal() +\n  labs(title=\"Migration Flows by Country\", x=\"Source Country\", y=\"Number of Migrants\") +\n  theme(axis.text.x = element_text(angle = 90, hjust = 1))\n\nprint(migration_flow)\n\n\n\n\n\n\n\nTop Migrating Countries\n\n\nShow the code\n# Summarize top migrating countries\ntop_migrating_countries <- data_long %>%\n  group_by(source) %>%\n  summarize(total_migrants = sum(value)) %>%\n  arrange(desc(total_migrants)) %>%\n  head(10)\n\n# Display in a table\nlibrary(DT)\n\n\n\nAttaching package: 'DT'\n\n\nThe following object is masked from 'package:networkD3':\n\n    JS\n\n\nShow the code\ndatatable(top_migrating_countries, options = list(pageLength = 5))"
+  },
+  {
+    "objectID": "Untitled.io/post-with-code/sank.html#conclusion",
+    "href": "Untitled.io/post-with-code/sank.html#conclusion",
+    "title": "Country Migration",
+    "section": "Conclusion",
+    "text": "Conclusion\nThe migration data reveals significant trends and patterns in global migration. By leveraging data visualization tools, we can uncover valuable insights that help understand the movement of people across countries.\nFeel free to explore the interactive elements and delve deeper into the analysis."
+  },
+  {
+    "objectID": "Untitled.io/post-with-code/bill2.html",
+    "href": "Untitled.io/post-with-code/bill2.html",
+    "title": "Test Post",
+    "section": "",
+    "text": "import pandas as pd import numpy as np import seaborn as sns import matplotlib.pyplot as plt from sklearn.ensemble import RandomForestClassifier from sklearn.model_selection import train_test_split from sklearn.preprocessing import LabelEncoder from sklearn.metrics import accuracy_score\nprint(“Quarto and Python are working together!”)"
+  },
+  {
+    "objectID": "Untitled.io/post-with-code/Sleeping.html",
+    "href": "Untitled.io/post-with-code/Sleeping.html",
+    "title": "Sleep and Employment: Predicting Job Classification through Data Analytics",
+    "section": "",
+    "text": "This study aims to predict job roles accurately by analyzing the relationship between sleep patterns, job classification, and other relevant factors. By utilizing sleep-related data and demographics in a model, the researchers seek to optimize workforce planning and develop personalized workplace strategies"
+  },
+  {
+    "objectID": "Untitled.io/post-with-code/Sleeping.html#problem-statement",
+    "href": "Untitled.io/post-with-code/Sleeping.html#problem-statement",
+    "title": "Sleep and Employment: Predicting Job Classification through Data Analytics",
+    "section": "Problem Statement",
+    "text": "Problem Statement\nThe research aims to improve human resource management strategies and personalized workplace interventions by accurately predicting job classifications through the analysis of sleep patterns and other health-related factors, exploring the relationship between sleep, stress, and job characteristics."
+  },
+  {
+    "objectID": "Untitled.io/post-with-code/Sleeping.html#research-questions",
+    "href": "Untitled.io/post-with-code/Sleeping.html#research-questions",
+    "title": "Sleep and Employment: Predicting Job Classification through Data Analytics",
+    "section": "Research Questions",
+    "text": "Research Questions\nTo what extent do sleep patterns, along with other factors, correlate with a person’s job classification?\nHow accurately can a classification model predict a person’s job based on their sleep patterns and other relevant factors?\nimport pandas as pd\nimport numpy as np\nimport seaborn as sns\nimport matplotlib.pyplot as plt\nfrom sklearn.ensemble import RandomForestClassifier\nfrom sklearn.model_selection import train_test_split\nfrom sklearn.preprocessing import LabelEncoder\nfrom sklearn.metrics import accuracy_score\nfrom sklearn.decomposition import PCA\n\nprint(\"Libraries imported successfully!\")\n\nimport os\n\nfile_path = '/Users/Shared/Python/Sleep_health_and_lifestyle_dataset.csv'\n\n# Check if the file exists\nif os.path.exists(file_path):\n    print(\"File exists, proceeding to load.\")\n    try:\n        sleep = pd.read_csv(file_path)\n        print(\"File loaded successfully.\")\n        print(sleep.head())  # Print the first few rows to confirm the data is loaded\n    except Exception as e:\n        print(f\"An error occurred while loading the file: {e}\")\nelse:\n    print(\"File does not exist, please check the file path.\")\n    \nsleep = pd.read_csv(file_path)\n\nimport pandas as pd\nimport seaborn as sns\nfile_path = '/Users/Shared/Python/Sleep_health_and_lifestyle_dataset.csv'\nsleep = pd.read_csv(file_path)\n\nsleep.info()\n\nsleep.describe()\n\n# Select some columns that might have a correlation\nnumerical_data = sleep[['Age', 'Sleep Duration','Quality of Sleep','Physical Activity Level', 'Stress Level','Heart Rate', 'Daily Steps']]\ncorrelation_matrix = numerical_data.corr()\n\n# Generate the heatmap and use a new color sheme\nax = sns.heatmap(correlation_matrix, annot=True, cmap=\"PuOr\");\nfig = ax.get_figure()"
+  },
+  {
+    "objectID": "Untitled.io/post-with-code/Sleeping.html#correlation-of-numeric-variables",
+    "href": "Untitled.io/post-with-code/Sleeping.html#correlation-of-numeric-variables",
+    "title": "Sleep and Employment: Predicting Job Classification through Data Analytics",
+    "section": "Correlation of Numeric Variables",
+    "text": "Correlation of Numeric Variables\nimport pandas as pd\nimport seaborn as sns\nimport matplotlib.pyplot as plt\nfile_path = '/Users/Shared/Python/Sleep_health_and_lifestyle_dataset.csv'\nsleep = pd.read_csv(file_path)\n\n# Select some columns that might have a correlation\nnumerical_data = sleep[['Age', 'Sleep Duration','Quality of Sleep','Physical Activity Level', 'Stress Level','Heart Rate', 'Daily Steps']]\ncorrelation_matrix = numerical_data.corr()\n\n# Generate the heatmap and use a new color sheme\nplt.figure(figsize=(10, 8))\nax = sns.heatmap(correlation_matrix, annot=True, cmap=\"PuOr\");\nfig = ax.get_figure()\n\nplt.title('Correlation Matrix of Selected Features')\nplt.show()"
+  },
+  {
+    "objectID": "Untitled.io/post-with-code/Sleeping.html#occupation-by-the-numbers",
+    "href": "Untitled.io/post-with-code/Sleeping.html#occupation-by-the-numbers",
+    "title": "Sleep and Employment: Predicting Job Classification through Data Analytics",
+    "section": "Occupation By The Numbers",
+    "text": "Occupation By The Numbers\nimport pandas as pd\nimport seaborn as sns\nfile_path = '/Users/Shared/Python/Sleep_health_and_lifestyle_dataset.csv'\nsleep = pd.read_csv(file_path)\nsleep.Occupation.unique()\n\nsleep.groupby('Occupation').agg(\n    num_occ=('Occupation', 'size')\n).reset_index()\nimport pandas as pd\nimport seaborn as sns\nfile_path = '/Users/Shared/Python/Sleep_health_and_lifestyle_dataset.csv'\nsleep = pd.read_csv(file_path)\ndef occupation_group(row):\n    if row[\"Occupation\"] in [\"Salesperson\", \"Sales Representative\", \"Manager\"]:\n        return \"Sales\"\n    elif row[\"Occupation\"] in [\"Software Engineer\", \"Scientist\", \"Accountant\"]:\n        return \"STEM\"\n    elif row[\"Occupation\"] in [\"Doctor\", \"Nurse\"]:\n        return \"Medical\"\n    else:\n        return row[\"Occupation\"]\n\nsleep[\"Occupation_Group\"] = sleep.apply(occupation_group, axis=1)"
+  },
+  {
+    "objectID": "Untitled.io/post-with-code/Sleeping.html#look-at-distribution-based-on-age",
+    "href": "Untitled.io/post-with-code/Sleeping.html#look-at-distribution-based-on-age",
+    "title": "Sleep and Employment: Predicting Job Classification through Data Analytics",
+    "section": "Look at distribution based on Age",
+    "text": "Look at distribution based on Age\nimport pandas as pd\nimport seaborn as sns\nimport matplotlib.pyplot as plt\nfile_path = '/Users/Shared/Python/Sleep_health_and_lifestyle_dataset.csv'\nsleep = pd.read_csv(file_path)\n\n# Look at the distribution based on Age\nfig, ax = plt.subplots(figsize=(10, 5))\nax.hist(sleep['Age'], bins=15)\nax.set_title('Distribution of Ages')\nax.set_xlabel('Age')\nax.set_ylabel('Frequency')\nplt.show()"
+  },
+  {
+    "objectID": "Untitled.io/post-with-code/Sleeping.html#stress-level",
+    "href": "Untitled.io/post-with-code/Sleeping.html#stress-level",
+    "title": "Sleep and Employment: Predicting Job Classification through Data Analytics",
+    "section": "Stress Level",
+    "text": "Stress Level\nimport pandas as pd\nimport seaborn as sns\nimport matplotlib.pyplot as plt\nfile_path = '/Users/Shared/Python/Sleep_health_and_lifestyle_dataset.csv'\nsleep = pd.read_csv(file_path)\n\nsleep.groupby('Stress Level').agg(\n    num_individuals=('Stress Level', 'size')\n).reset_index()"
+  },
+  {
+    "objectID": "Untitled.io/post-with-code/Sleeping.html#sleep-duration",
+    "href": "Untitled.io/post-with-code/Sleeping.html#sleep-duration",
+    "title": "Sleep and Employment: Predicting Job Classification through Data Analytics",
+    "section": "Sleep Duration",
+    "text": "Sleep Duration\nimport pandas as pd\nimport seaborn as sns\nimport matplotlib.pyplot as plt\nfile_path = '/Users/Shared/Python/Sleep_health_and_lifestyle_dataset.csv'\nsleep = pd.read_csv(file_path)\n\n# Look at the distribution based on Age\nfig, ax = plt.subplots(figsize=(10, 5))\nax.hist(sleep['Sleep Duration'], bins=20)\nax.set_title('Distribution of Sleep Duration')\nax.set_xlabel('Sleep Duration')\nax.set_ylabel('Frequency')\nplt.show()\n#Figure out who is 8.5?"
+  },
+  {
+    "objectID": "Untitled.io/post-with-code/Sleeping.html#quality-of-sleep",
+    "href": "Untitled.io/post-with-code/Sleeping.html#quality-of-sleep",
+    "title": "Sleep and Employment: Predicting Job Classification through Data Analytics",
+    "section": "Quality of Sleep",
+    "text": "Quality of Sleep\nimport pandas as pd\nimport seaborn as sns\nimport matplotlib.pyplot as plt\nfile_path = '/Users/Shared/Python/Sleep_health_and_lifestyle_dataset.csv'\nsleep = pd.read_csv(file_path)\n\nsleep.groupby('Quality of Sleep').agg(\n    num_individuals=('Quality of Sleep', 'size')\n).reset_index()"
+  },
+  {
+    "objectID": "Untitled.io/post-with-code/Sleeping.html#gender",
+    "href": "Untitled.io/post-with-code/Sleeping.html#gender",
+    "title": "Sleep and Employment: Predicting Job Classification through Data Analytics",
+    "section": "Gender",
+    "text": "Gender\nimport pandas as pd\nimport seaborn as sns\nimport matplotlib.pyplot as plt\nfile_path = '/Users/Shared/Python/Sleep_health_and_lifestyle_dataset.csv'\nsleep = pd.read_csv(file_path)\n\nsleep.groupby('Gender').agg(\n    num_occ=('Gender', 'size')\n).reset_index()\nimport pandas as pd\nimport seaborn as sns\nimport matplotlib.pyplot as plt\nfile_path = '/Users/Shared/Python/Sleep_health_and_lifestyle_dataset.csv'\nsleep = pd.read_csv(file_path)\n\ngrouped_data = sleep.groupby(['Gender', 'Occupation']).size().reset_index(name='n')\n\n# Pivot the data to get 'Gender' as columns and 'Occupation' as index\npivot_data = grouped_data.pivot(index='Occupation', columns='Gender', values='n').fillna(0)\n\n# Rename the columns and reset the index\npivot_data.columns.name = None\npivot_data = pivot_data.reset_index()\n\npivot_data\nimport pandas as pd\nimport seaborn as sns\nimport matplotlib.pyplot as plt\nfile_path = '/Users/Shared/Python/Sleep_health_and_lifestyle_dataset.csv'\nsleep = pd.read_csv(file_path)\n\ngrouped_data = sleep.groupby(['Stress Level', 'Occupation']).size().reset_index(name='n')\n\n# Pivot the data to get 'Gender' as columns and 'Occupation' as index\npivot_data = grouped_data.pivot(index='Occupation', columns='Stress Level', values='n').fillna(0)\n\n# Rename the columns and reset the index\npivot_data.columns.name = None\npivot_data = pivot_data.reset_index()\n\npivot_data\nimport pandas as pd\nimport seaborn as sns\nimport matplotlib.pyplot as plt\nfile_path = '/Users/Shared/Python/Sleep_health_and_lifestyle_dataset.csv'\nsleep = pd.read_csv(file_path)\n# Pivot the data to get 'Gender' as columns and 'Occupation' as index\ngrouped_data = sleep.groupby(['Stress Level', 'Occupation']).size().reset_index(name='n')\npivot_data = grouped_data.pivot(index='Occupation', columns='Stress Level', values='n').fillna(0)\npivot_data.columns.name = None\npivot_data = pivot_data.reset_index()\n\npivot_data\n# Create the heatmap using seaborn\nsns.heatmap(pivot_data.set_index('Occupation'), annot=True, cmap='YlGnBu', fmt='g')\n\n# Set the title and labels\nplt.title(\"Stress Level vs Occupation Heatmap\")\nplt.xlabel(\"Stress Level\")\nplt.ylabel(\"Occupation\")\n\n# Display the heatmap\nplt.show()\nimport pandas as pd\nimport seaborn as sns\nimport matplotlib.pyplot as plt\nfile_path = '/Users/Shared/Python/Sleep_health_and_lifestyle_dataset.csv'\nsleep = pd.read_csv(file_path)\n# Pivot the data to get 'Gender' as columns and 'Occupation' as index\n\ngrouped_data = sleep.groupby(['Quality of Sleep', 'Stress Level']).size().reset_index(name='Total Counts')\n\n\n# Pivot the data to create a heatmap\npivot_data = grouped_data.pivot(index='Stress Level', columns='Quality of Sleep', values='Total Counts').fillna(0)\n\n# Create the heatmap using seaborn\nplt.figure(figsize=(10, 6))\nsns.heatmap(pivot_data, annot=True, cmap='YlGnBu', fmt='g')\nplt.xlabel('Quality of Sleep')\nplt.ylabel('Stress Level')\nplt.title('Heatmap of Quality of Sleep vs. Stress Level')\nplt.show()"
+  },
+  {
+    "objectID": "Untitled.io/post-with-code/Sleeping.html#machine-learning",
+    "href": "Untitled.io/post-with-code/Sleeping.html#machine-learning",
+    "title": "Sleep and Employment: Predicting Job Classification through Data Analytics",
+    "section": "Machine Learning",
+    "text": "Machine Learning\nimport pandas as pd\nimport numpy as np\nimport seaborn as sns\nimport matplotlib.pyplot as plt\nfrom sklearn.model_selection import train_test_split\nfrom sklearn.ensemble import RandomForestClassifier\nfrom sklearn.metrics import accuracy_score, ConfusionMatrixDisplay\nfrom sklearn.preprocessing import OneHotEncoder, LabelEncoder\nfrom sklearn.impute import SimpleImputer\n\n# Load the dataset\nfile_path = '/Users/Shared/Python/Sleep_health_and_lifestyle_dataset.csv'\nsleep = pd.read_csv(file_path)\n\n# Separate features and target variable\nx = sleep.drop(columns=['Person ID', 'Sleep Disorder', 'Blood Pressure'])\ny = sleep['Sleep Disorder']\n\n# Inspect the data for NaNs\nprint(\"Checking for NaNs in the dataset:\")\nprint(x.isnull().sum())\n\n# Handle missing values\n# Impute numerical columns with mean\nnumerical_cols = x.select_dtypes(include=['float64', 'int64']).columns\nimputer_num = SimpleImputer(strategy='mean')\nx[numerical_cols] = imputer_num.fit_transform(x[numerical_cols])\n\n# Impute categorical columns with most frequent value\ncategorical_cols = ['Gender', 'Occupation', 'BMI Category', 'Stress Level']\nimputer_cat = SimpleImputer(strategy='most_frequent')\nx[categorical_cols] = imputer_cat.fit_transform(x[categorical_cols])\n\n# Recheck for any remaining NaN values\nprint(\"Rechecking for NaNs after imputation:\")\nprint(x.isnull().sum())\n\n# Encode categorical variables\nlabel_encoder = LabelEncoder()\nfor col in categorical_cols:\n    x[col] = label_encoder.fit_transform(x[col])\n\n# Ensure there are no NaNs before proceeding\nif x.isnull().values.any():\n    raise ValueError(\"Data still contains NaN values after handling missing data.\")\n\n# Split the data into training and testing sets\nx_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2, random_state=42)\n\n# One-hot encode the categorical columns\nencoder = OneHotEncoder()\nx_train_encoded = encoder.fit_transform(x_train[categorical_cols])\nx_test_encoded = encoder.transform(x_test[categorical_cols])\n\n# Combine the one-hot encoded features with other numerical features\nx_train_final = np.hstack((x_train_encoded.toarray(), x_train.drop(columns=categorical_cols).values))\nx_test_final = np.hstack((x_test_encoded.toarray(), x_test.drop(columns=categorical_cols).values))\n\n# Fit the RandomForestClassifier and make predictions\nrf_classifier = RandomForestClassifier(n_estimators=100, random_state=42)\nrf_classifier.fit(x_train_final, y_train)\ny_pred = rf_classifier.predict(x_test_final)\naccuracy = accuracy_score(y_test, y_pred)\nprint(\"Accuracy of the random forest classifier:\", accuracy)\n\n# Display the confusion matrix\nConfusionMatrixDisplay.from_predictions(y_test, y_pred, labels=rf_classifier.classes_, display_labels=rf_classifier.classes_, cmap=\"YlGnBu\")\nplt.show()"
+  },
+  {
+    "objectID": "Untitled.io/post-with-code/Sleeping.html#random-forrest-vs.-svm-classifier",
+    "href": "Untitled.io/post-with-code/Sleeping.html#random-forrest-vs.-svm-classifier",
+    "title": "Sleep and Employment: Predicting Job Classification through Data Analytics",
+    "section": "Random Forrest vs. SVM Classifier",
+    "text": "Random Forrest vs. SVM Classifier\nimport pandas as pd\nimport numpy as np\nfrom sklearn.model_selection import train_test_split\nfrom sklearn.ensemble import RandomForestClassifier\nfrom sklearn.svm import SVC\nfrom sklearn.metrics import confusion_matrix\nfrom sklearn.metrics import ConfusionMatrixDisplay\nfrom sklearn.metrics import accuracy_score\nfrom sklearn.preprocessing import LabelEncoder, OneHotEncoder\n\n#Load the dataset\nfile_path = '/Users/Shared/Python/Sleep_health_and_lifestyle_dataset.csv'\nsleep = pd.read_csv(file_path)\n\n# Assuming 'sleep' is your DataFrame\nx = sleep.drop(columns=['Person ID', 'Sleep Disorder', 'Blood Pressure'])\ny = sleep['Sleep Disorder']\n\nlabel_encoder = LabelEncoder()\ncategorical_cols = ['Gender', 'Occupation', 'BMI Category', 'Stress Level']\nfor col in categorical_cols:\n    x[col] = label_encoder.fit_transform(x[col])\n\n# One-hot encode the categorical columns (if needed)\nencoder = OneHotEncoder()\nx_encoded = encoder.fit_transform(x[categorical_cols])\nx_final = np.hstack((x_encoded.toarray(), x.drop(columns=categorical_cols).values))\n\nx_train, x_test, y_train, y_test = train_test_split(x_final, y, test_size=0.2, random_state=42)\n\n# RandomForestClassifier\nrf_classifier = RandomForestClassifier(n_estimators=100, random_state=42)\nrf_classifier.fit(x_train, y_train)\ny_pred_rf = rf_classifier.predict(x_test)\naccuracy_rf = accuracy_score(y_test, y_pred_rf)\n\n# SVM Classifier\nsvm_classifier = SVC(kernel='linear', random_state=42)\nsvm_classifier.fit(x_train, y_train)\ny_pred_svm = svm_classifier.predict(x_test)\naccuracy_svm = accuracy_score(y_test, y_pred_svm)\n\nprint(\"Accuracy of the random forest classifier:\", accuracy_rf)\nprint(\"Accuracy of the SVM classifier:\", accuracy_svm)\n\nConfusionMatrixDisplay.from_predictions(y_test, y_pred_svm, display_labels=svm_classifier.classes_, cmap=\"YlGnBu\")\nplt.show()"
+  },
+  {
+    "objectID": "Untitled.io/post-with-code/Sleeping.html#clustering",
+    "href": "Untitled.io/post-with-code/Sleeping.html#clustering",
+    "title": "Sleep and Employment: Predicting Job Classification through Data Analytics",
+    "section": "Clustering",
+    "text": "Clustering\nfrom sklearn.preprocessing import OneHotEncoder, LabelEncoder, StandardScaler\nfrom sklearn.cluster import KMeans\nimport matplotlib.pyplot as plt\nimport pandas as pd\n\n# Load the dataset\nfile_path = '/Users/Shared/Python/Sleep_health_and_lifestyle_dataset.csv'\nsleep = pd.read_csv(file_path)\n\n# Assuming 'sleep' is your DataFrame\n# Split 'Blood Pressure' into 'Systolic' and 'Diastolic'\nbp_split = sleep['Blood Pressure'].str.split('/', expand=True)\nsleep['Systolic'] = pd.to_numeric(bp_split[0], errors='coerce')\nsleep['Diastolic'] = pd.to_numeric(bp_split[1], errors='coerce')\n\n# Drop the original 'Blood Pressure' column\nx = sleep.drop(columns=['Person ID', 'Sleep Disorder', 'Gender', 'Blood Pressure'])\ny = sleep['Sleep Disorder']\n\n# Encode categorical variables\nlabel_encoder = LabelEncoder()\ncategorical_cols = ['Occupation', 'BMI Category', 'Stress Level']\nfor col in categorical_cols:\n    x[col] = label_encoder.fit_transform(x[col])\n\n# Normalize the data\nscaler = StandardScaler()\nx_scaled = scaler.fit_transform(x)\n\n# Perform K-means clustering\nkmeans = KMeans(n_clusters=3, random_state=42)\nkmeans_clusters = kmeans.fit_predict(x_scaled)\n\n# Visualize the clusters\nplt.scatter(x_scaled[:, 0], x_scaled[:, 1], c=kmeans_clusters, cmap='viridis', marker='o')\nplt.xlabel('Feature 1')\nplt.ylabel('Feature 2')\nplt.title('K-means Clustering')\nplt.show()"
+  },
+  {
+    "objectID": "Untitled.io/post-with-code/Sleeping.html#summary",
+    "href": "Untitled.io/post-with-code/Sleeping.html#summary",
+    "title": "Sleep and Employment: Predicting Job Classification through Data Analytics",
+    "section": "Summary",
+    "text": "Summary\nThis study delved into the relationship between sleep patterns, job classification, and other relevant factors to accurately predict job roles. By leveraging data analytics and machine learning techniques, we aimed to optimize workforce planning and develop personalized workplace strategies.\nKey Insights\n1.Correlation Analysis: Identified significant correlations between sleep duration, stress levels, and job classifications.\n2.Distribution Analysis: Provided insights into the age and sleep duration distributions among different occupations.\n3.Heatmaps Highlighted the relationship between stress levels and sleep quality across various occupations.\n4.Machine Learning Models: Demonstrated that Random Forest and SVM classifiers could predict sleep disorders with high accuracy based on sleep-related data.\n5.Clustering: K-means clustering revealed distinct groups within the data, indicating potential subgroups with unique sleep and job characteristics."
+  },
+  {
+    "objectID": "Untitled.io/post-with-code/Sleeping.html#conclusions",
+    "href": "Untitled.io/post-with-code/Sleeping.html#conclusions",
+    "title": "Sleep and Employment: Predicting Job Classification through Data Analytics",
+    "section": "Conclusions",
+    "text": "Conclusions\n1.Predictive Power: Sleep patterns, stress levels, and demographic data can effectively predict job classifications.\n2.Model Performance: Random Forest classifiers showed promising accuracy, outperforming SVM in this context.\n3.Workforce Planning: These insights can inform HR strategies, promoting better sleep health and productivity among employees.\n4.Future Research: Further studies can explore additional factors such as dietary habits and mental health for a comprehensive analysis.\nThis comprehensive analysis underscores the critical role of sleep patterns in predicting job classifications, offering valuable insights for both researchers and HR professionals. By integrating these findings into workforce management strategies, organizations can foster a healthier, more productive work environment."
+  },
+  {
+    "objectID": "Untitled.io/post-with-code/bill.html",
+    "href": "Untitled.io/post-with-code/bill.html",
+    "title": "Billboard Top 100’s in 2000",
+    "section": "",
+    "text": "This analysis focuses on the Billboard Top 100 chart from the year 2000, particularly examining the #1 hit singles that stayed at the top position the longest. Using data manipulation and visualization techniques in R, we can gain insights into the music trends of that year and identify the most dominant songs and artists."
+  },
+  {
+    "objectID": "Untitled.io/post-with-code/bill.html#libraries-and-data-preparation",
+    "href": "Untitled.io/post-with-code/bill.html#libraries-and-data-preparation",
+    "title": "Billboard Top 100’s in 2000",
+    "section": "Libraries and Data Preparation",
+    "text": "Libraries and Data Preparation\nWe start by loading the necessary R libraries for data manipulation, visualization, and analysis.\n\n\nShow the code\nlibrary(tidyverse)   # For data manipulation and visualization\nlibrary(lubridate)   # For date manipulation\nlibrary(skimr)       # For summarizing data\nlibrary(survival)    # For survival analysis (not used in this example)\nlibrary(survminer)   # For visualizing survival analysis (not used in this example)\nlibrary(flextable)   # For creating flexible tables\nlibrary(DT)          # For interactive tables\n\n\nThe billboard dataset is reshaped to gather weekly rankings into a long format, making it easier to filter and analyze the data.\n\n\nShow the code\n# Load the dataset\ndata(\"billboard\", package = \"tidyverse\") # Ensure you have the billboard dataset loaded\nds = billboard\n\n# Reshape the data from wide to long format\nds = billboard %>% gather(key = week, value = rank, wk1:wk76)\n\n# Convert week column to numeric and ensure rank is numeric\nds$week = as.numeric(gsub(\"wk\", \"\", ds$week))\nds$rank = as.numeric(ds$rank)"
+  },
+  {
+    "objectID": "Untitled.io/post-with-code/bill.html#filtering-and-summarizing-data",
+    "href": "Untitled.io/post-with-code/bill.html#filtering-and-summarizing-data",
+    "title": "Billboard Top 100’s in 2000",
+    "section": "Filtering and Summarizing Data",
+    "text": "Filtering and Summarizing Data\nWe filter the dataset to include only the rows where the song was ranked #1. Then, we group by artist and track to count the number of weeks each song stayed at the top position.\n\n\nShow the code\n# Filter for #1 ranked songs and summarize the duration at #1\nds = ds %>%\n  filter(rank == 1) %>%\n  group_by(artist, track) %>%\n  summarize(weeksAtNumberOne = n()) %>%\n  arrange(desc(weeksAtNumberOne))\n\n# Display the summarized data as a flextable\nas_flextable(ds)\n\n\n\nartisttrackweeksAtNumberOnecharactercharacterintegerDestiny's ChildIndependent Women Pa...11SantanaMaria, Maria10Aguilera, ChristinaCome On Over Baby (A...4MadonnaMusic4Savage GardenI Knew I Loved You4Destiny's ChildSay My Name3Iglesias, EnriqueBe With You3JanetDoesn't Really Matte...3Aguilera, ChristinaWhat A Girl Wants2LonestarAmazed2n: 17\n\n\nWe use the flextable library to create a flexible and visually appealing table that displays the artists and tracks along with the number of weeks they stayed at #1."
+  },
+  {
+    "objectID": "Untitled.io/post-with-code/bill.html#additional-visualizations",
+    "href": "Untitled.io/post-with-code/bill.html#additional-visualizations",
+    "title": "Billboard Top 100’s in 2000",
+    "section": "Additional Visualizations",
+    "text": "Additional Visualizations\n\n\nShow the code\n# Summarize total weeks at #1 for each artist\nartist_summary <- ds %>%\n  group_by(artist) %>%\n  summarize(totalWeeksAtNumberOne = sum(weeksAtNumberOne)) %>%\n  arrange(desc(totalWeeksAtNumberOne))\n\n# Bar chart of top artists by total weeks at #1\nggplot(artist_summary, aes(x = reorder(artist, totalWeeksAtNumberOne), y = totalWeeksAtNumberOne)) +\n  geom_bar(stat = \"identity\", fill = \"steelblue\") +\n  coord_flip() +\n  labs(title = \"Top Artists by Total Weeks at #1 in 2000\", x = \"Artist\", y = \"Total Weeks at #1\") +\n  theme_minimal()\n\n\n\n\n\n\n\nShow the code\n# Histogram of weeks at #1\nggplot(ds, aes(x = weeksAtNumberOne)) +\n  geom_histogram(binwidth = 1, fill = \"darkorange\", color = \"black\") +\n  labs(title = \"Distribution of Weeks at #1\", x = \"Weeks at #1\", y = \"Count of Songs\") +\n  theme_minimal()\n\n\n\n\n\n\n\nShow the code\n# Interactive data table\ndatatable(ds, options = list(pageLength = 10, autoWidth = TRUE),\n          caption = 'Number of Weeks Each Song Stayed at #1 in 2000')"
+  },
+  {
+    "objectID": "Untitled.io/post-with-code/bill.html#conclusion",
+    "href": "Untitled.io/post-with-code/bill.html#conclusion",
+    "title": "Billboard Top 100’s in 2000",
+    "section": "Conclusion",
+    "text": "Conclusion\nThis analysis provides a clear view of the songs that dominated the Billboard Top 100 charts in the year 2000. By identifying the tracks that remained at #1 the longest, we can better understand the music trends and preferences of that time. This type of analysis can be expanded to include other years or additional chart metrics to gain further insights into the evolution of popular music."
+  },
+  {
+    "objectID": "Untitled.io/post-with-code/ORMATH.html",
+    "href": "Untitled.io/post-with-code/ORMATH.html",
+    "title": "Analysis of Math Students in Oregon",
+    "section": "",
+    "text": "This analysis is conducted to examine the performance of Math students in the state of Oregon across various demographic factors. By leveraging data visualization and statistical methods, we aim to uncover key insights that can inform educational policy and resource allocation."
+  },
+  {
+    "objectID": "Untitled.io/post-with-code/ORMATH.html#data-analysis",
+    "href": "Untitled.io/post-with-code/ORMATH.html#data-analysis",
+    "title": "Analysis of Math Students in Oregon",
+    "section": "Data Analysis",
+    "text": "Data Analysis\n\nStudent Performance by Ethnicity/Student Group:\nSummary: This analysis tracks the performance of Math students based on various demographic factors such as ethnicity, gender, and socioeconomic status.\nKey Insights:\nIdentification of High and Low Performing Regions: By analyzing performance data, regions with significant disparities can be identified, enabling targeted interventions and resource allocation.\nSupport for Demographic Groups: The analysis highlights which demographic groups may require additional support or resources, informing the development of tailored educational programs.\nRegional Disparities: The identification of regional disparities can guide policy-makers to implement targeted interventions aimed at improving educational outcomes in underperforming areas.\n\n\nShow the code\nORmath = read_csv(paste(thePath, \"ORmath.csv\", sep = \"/\"))\n\n\nRows: 176 Columns: 7\n── Column specification ────────────────────────────────────────────────────────\nDelimiter: \",\"\nchr (2): StudentGroup, GradeLevel\ndbl (5): PercentProficient, PercentLevel4, PercentLevel3, PercentLevel2, Per...\n\nℹ Use `spec()` to retrieve the full column specification for this data.\nℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.\n\n\nShow the code\nORmath %>% \n  filter(GradeLevel != \"All Grades\") %>%\n  ggplot(aes(x = StudentGroup, y = PercentProficient)) +\n  geom_boxplot(color = \"black\", fill = \"cyan4\") +\n  ggtitle(\"OR Academic Report Card 2021-2022: Standardized Math Exam\") +\n  xlab(\"Student Group\") + \n  ylab(\"% Proficient (score of 3 or 4)\") +\n  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))\n\n\nWarning: Removed 12 rows containing non-finite values (`stat_boxplot()`)."
+  },
+  {
+    "objectID": "Untitled.io/post-with-code/powerbilhr.html",
+    "href": "Untitled.io/post-with-code/powerbilhr.html",
+    "title": "Human Resources Analytics Dashboard",
+    "section": "",
+    "text": "Presented here is a real-life Power BI Dashboard that I crafted for a previous organization, offering a glimpse into the intricate web of key performance indicators (KPIs) and metrics vital for organizational success. Divided into distinct sections, each segment of the dashboard delivers unique insights tailored to the organization’s overarching objectives.\nIn essence, the Power BI Dashboard serves as a beacon guiding decision-makers through the labyrinth of organizational performance. By facilitating real-time monitoring, trend identification, and data-driven decision-making, it fosters a holistic approach to performance management.\nThe accompanying visuals further enrich the narrative, offering succinct summaries and insights into critical facets of organizational dynamics. The HR summary, for instance, delves into workforce demographics, retention trends, and diversity metrics, serving as a compass for inclusive talent management strategies.\nThe HR summary offers a detailed overview of the workforce demographics, including ethnicity, gender, and retention trends. It is a vital tool for assessing diversity, inclusion efforts, and identifying areas for improvement.\nDemographic Analysis: Displays the composition of the workforce by ethnicity and gender.\nRetention Trends: Showcases turnover rates, average tenure, and reasons for employee departures."
+  },
+  {
+    "objectID": "Untitled.io/post-with-code/powerbilhr.html#terminations",
+    "href": "Untitled.io/post-with-code/powerbilhr.html#terminations",
+    "title": "Human Resources Analytics Dashboard",
+    "section": "Terminations",
+    "text": "Terminations\nLikewise, the Terminations Summary lays bare the landscape of employee departures, providing valuable insights into turnover patterns and contributing factors. Complemented by legal compliance considerations, it serves as a cornerstone for optimizing HR processes.\nThis summary provides insights into employee terminations, categorizing them by reasons such as voluntary resignations, involuntary dismissals, and retirements.\nTermination Reasons: Helps identify patterns in employee departures.\nHR Process Optimization: Offers insights for improving employee engagement and performance management processes."
+  },
+  {
+    "objectID": "Untitled.io/post-with-code/powerbilhr.html#talent-summary",
+    "href": "Untitled.io/post-with-code/powerbilhr.html#talent-summary",
+    "title": "Human Resources Analytics Dashboard",
+    "section": "Talent Summary",
+    "text": "Talent Summary\nFinally, the Talent Summary emerges as a beacon for talent management, leveraging data insights to inform strategic decisions on acquisition, development, and retention. Together, these summaries form an arsenal of actionable insights, empowering organizations to navigate the complexities of talent dynamics with precision and foresight.\nThe Talent Summary provides an overview of the organization’s talent management, focusing on acquisition, development, and retention.\nTalent Acquisition: Analyzes the effectiveness of recruitment strategies.\nEmployee Development: Tracks progress and impact of training programs.\nRetention Strategies: Evaluates the success of initiatives aimed at retaining top talent."
+  },
+  {
+    "objectID": "Untitled.io/post-with-code/powerbilhr.html#conclusion",
+    "href": "Untitled.io/post-with-code/powerbilhr.html#conclusion",
+    "title": "Human Resources Analytics Dashboard",
+    "section": "Conclusion",
+    "text": "Conclusion\nThe Human Resources Analytics Dashboard is an indispensable tool for organizational leaders, providing comprehensive insights into financial performance, sales trends, customer satisfaction, and workforce dynamics. By facilitating data-driven decision-making, it empowers the organization to enhance performance management, drive growth, and foster a culture of continuous improvement."
+  },
+  {
+    "objectID": "Untitled.io/post-with-code/Netflix Survival.html",
+    "href": "Untitled.io/post-with-code/Netflix Survival.html",
+    "title": "Netflix Survival Analysis",
+    "section": "",
+    "text": "This dataset, collected over two years from January 2017 to June 2019, captures the behavior of Netflix users in the UK who opted to have their browser activity tracked. This data, which represents approximately 25% of global traffic activity from laptops and desktops, provides valuable insights into viewing patterns and preferences. The primary goal of this analysis is to understand how filmmakers and creators can determine what movies to produce and which audiences to target."
+  },
+  {
+    "objectID": "Untitled.io/post-with-code/Netflix Survival.html#data-preparation",
+    "href": "Untitled.io/post-with-code/Netflix Survival.html#data-preparation",
+    "title": "Netflix Survival Analysis",
+    "section": "Data Preparation",
+    "text": "Data Preparation\n\n\nShow the code\nlibrary(tidyverse)\n\n\n── Attaching packages ─────────────────────────────────────── tidyverse 1.3.2 ──\n✔ ggplot2 3.4.0     ✔ purrr   1.0.0\n✔ tibble  3.2.1     ✔ dplyr   1.1.1\n✔ tidyr   1.2.1     ✔ stringr 1.5.0\n✔ readr   2.1.3     ✔ forcats 0.5.2\n── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──\n✖ dplyr::filter() masks stats::filter()\n✖ dplyr::lag()    masks stats::lag()\n\n\nShow the code\nlibrary(skimr)\nlibrary(survival)\nlibrary(survminer)\n\n\nLoading required package: ggpubr\n\nAttaching package: 'survminer'\n\nThe following object is masked from 'package:survival':\n\n    myeloma\n\n\nShow the code\nlibrary(fitdistrplus)\n\n\nLoading required package: MASS\n\nAttaching package: 'MASS'\n\nThe following object is masked from 'package:dplyr':\n\n    select\n\n\nShow the code\nthePath=\"/Users/Shared/Survival Analysis\"\n\ndf = read_csv(paste(thePath, \"vodclickstream_uk_movies_03.csv\", sep=\"/\"))\n\n\nNew names:\nRows: 671736 Columns: 8\n── Column specification\n──────────────────────────────────────────────────────── Delimiter: \",\" chr\n(5): title, genres, release_date, movie_id, user_id dbl (2): ...1, duration\ndttm (1): datetime\nℹ Use `spec()` to retrieve the full column specification for this data. ℹ\nSpecify the column types or set `show_col_types = FALSE` to quiet this message.\n• `` -> `...1`\n\n\nShow the code\ndf2 = read_csv(paste(thePath, \"netflix_titles.csv\", sep=\"/\"))\n\n\nRows: 8807 Columns: 12\n── Column specification ────────────────────────────────────────────────────────\nDelimiter: \",\"\nchr (11): show_id, type, title, director, cast, country, date_added, rating,...\ndbl  (1): release_year\n\nℹ Use `spec()` to retrieve the full column specification for this data.\nℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.\n\n\nShow the code\n# Merging data that contains movie length to normalize watch length\ndf <- merge(df, df2, by = \"title\")\n\n# Data cleaning and preparation\ndf <- subset(df, !grepl(\"Seasons\", duration.y)) # Removing seasons\ndf$duration.y <- as.numeric(gsub(\" min\", \"\", df$duration.y)) # Converting duration to numeric\n\n\nWarning: NAs introduced by coercion\n\n\nShow the code\ndf <- subset(df, duration.x > 0) # Removing invalid durations\n\n# Creating columns for analysis\ndf <- df %>%\n    mutate(\n        event = ifelse(duration.x > 0, 1, 0),\n        genres = as.factor(genres),\n        minutes_watched = duration.x / 60,\n        perc_movie_watched = minutes_watched / duration.y,\n        is_action = ifelse(grepl('Action', genres), 1, 0),\n        is_adventure = ifelse(grepl('Adventure', genres), 1, 0),\n        is_comedy = ifelse(grepl('Comedy', genres), 1, 0),\n        is_documentary = ifelse(grepl('Documentary', genres), 1, 0),\n        is_drama = ifelse(grepl('Drama', genres), 1, 0),\n        is_horror = ifelse(grepl('Horror', genres), 1, 0),\n        is_thriller = ifelse(grepl('Thriller', genres), 1, 0),\n        is_romance = ifelse(grepl('romance', genres), 1, 0),\n        is_animation = ifelse(grepl('animation', genres), 1, 0),\n        is_crime = ifelse(grepl('Crime', genres), 1, 0),\n        is_scifi = ifelse(grepl('Sci-Fi', genres), 1, 0),\n        is_sport = ifelse(grepl('Sport', genres), 1, 0),\n        is_musical = ifelse(grepl('musical', genres), 1, 0),\n        is_fantasy = ifelse(grepl('Fantasy', genres), 1, 0),\n        is_mystery = ifelse(grepl('Mystery', genres), 1, 0),\n        is_biography = ifelse(grepl('Biography', genres), 1, 0),\n        is_history = ifelse(grepl('History', genres), 1, 0),\n        is_war = ifelse(grepl('War', genres), 1, 0),\n        is_western = ifelse(grepl('Western', genres), 1, 0),\n        is_short = ifelse(grepl('Short', genres), 1, 0)\n    )\n\n# Cleaning up the percentage of the movie watched\ndf$perc_movie_watched_clean <- round(ifelse(df$perc_movie_watched > 1, 1, df$perc_movie_watched), 2)"
+  },
+  {
+    "objectID": "Untitled.io/post-with-code/Netflix Survival.html#key-insights-and-analysis",
+    "href": "Untitled.io/post-with-code/Netflix Survival.html#key-insights-and-analysis",
+    "title": "Netflix Survival Analysis",
+    "section": "Key Insights and Analysis",
+    "text": "Key Insights and Analysis\nTo understand viewing patterns across different genres, survival analysis was employed. The survival curves represent the probability of users continuing to watch a movie over time, segmented by genre. Here are the insights and analyses for some key genres:\n\nAction Movies:\n\n\nShow the code\nsurvobj <- Surv(df$perc_movie_watched_clean, df$event)\nfit_action <- survfit(survobj~is_action, data = df)\nggsurvplot(fit=fit_action, data=df, risk.table = F, conf.int=T) +\n    labs(\n        title=\"Netflix Movie Genre Survival Curve - Action\",\n        x=\"Watch Length (Minutes)\") \n\n\n\n\n\nShow the code\nsurv_median(fit_action)\n\n\nWarning: `select_()` was deprecated in dplyr 0.7.0.\nℹ Please use `select()` instead.\nℹ The deprecated feature was likely used in the survminer package.\n  Please report the issue at <\u001b]8;;https://github.com/kassambara/survminer/issues\u0007https://github.com/kassambara/survminer/issues\u001b]8;;\u0007>.\n\n\n       strata median lower upper\n1 is_action=0   0.97  0.97  0.98\n2 is_action=1   0.99  0.99    NA\n\n\nInsight: Action movies tend to have high initial engagement but may see a drop-off in viewership as the movie progresses.\nAnalysis: Filmmakers should focus on maintaining high-paced, engaging content throughout the movie to retain viewers.\n\n\nHorror Movies:\n\n\nShow the code\nfit_horror <- survfit(survobj~is_horror, data = df)\nggsurvplot(fit=fit_horror, data=df, risk.table = F, conf.int=T, surv.median.line = 'hv') +\n    labs(\n        title=\"Netflix Movie Genre Survival Curve - Horror\",\n        x=\"Watch Length (Minutes)\") \n\n\n\n\n\nShow the code\nsurv_median(fit_horror)\n\n\n       strata median lower upper\n1 is_horror=0   0.98  0.98  0.99\n2 is_horror=1   0.95  0.94  0.96\n\n\nInsight: Horror movies have a consistent viewership curve, indicating a dedicated audience.\nAnalysis: This genre benefits from strong, suspenseful storytelling that keeps viewers engaged from start to finish.\n\n\nThriller Movies:\n\n\nShow the code\nfit_thriller <- survfit(survobj~is_thriller, data = df)\nggsurvplot(fit=fit_thriller, data=df, risk.table = F, conf.int=T, surv.median.line = 'hv') +\n    labs(\n        title=\"Netflix Movie Genre Survival Curve - Thriller\",\n        x=\"Watch Length (Minutes)\") \n\n\n\n\n\nShow the code\nsurv_median(fit_thriller)\n\n\n         strata median lower upper\n1 is_thriller=0   0.99  0.98  0.99\n2 is_thriller=1   0.96  0.95  0.96\n\n\nInsight: Thriller movies show a steady decline in viewership over time.\nAnalysis: Thrillers need to maintain suspense and plot twists to keep the audience engaged.\n\n\nRomance Movies:\n\n\nShow the code\nfit_romance <- survfit(survobj~is_romance, data = df)\nggsurvplot(fit=fit_romance, data=df, risk.table = F, conf.int=T, surv.median.line = 'hv') +\n    labs(\n        title=\"Netflix Movie Genre Survival Curve - Romance\",\n        x=\"Watch Length (Minutes)\") \n\n\n\n\n\nShow the code\nsurv_median(fit_romance)\n\n\n  strata median lower upper\n1    All   0.98  0.97  0.98\n\n\nInsight: Romance movies tend to retain a significant portion of their audience throughout the film.\nAnalysis: Emotional engagement and character development are key to keeping viewers invested.\n\n\nAnimation Movies:\n\n\nShow the code\nfit_animation <- survfit(survobj~is_animation, data = df)\nggsurvplot(fit=fit_animation, data=df, risk.table = F, conf.int=T, surv.median.line = 'hv') +\n    labs(\n        title=\"Netflix Movie Genre Survival Curve - Animation\",\n        x=\"Watch Length (Minutes)\") \n\n\n\n\n\nShow the code\nsurv_median(fit_animation)\n\n\n  strata median lower upper\n1    All   0.98  0.97  0.98\n\n\nInsight: Animation movies have high retention rates, particularly among younger audiences.\nAnalysis: Visual appeal and engaging storylines are crucial for maintaining viewer interest in animation."
+  },
+  {
+    "objectID": "Untitled.io/post-with-code/Netflix Survival.html#summary",
+    "href": "Untitled.io/post-with-code/Netflix Survival.html#summary",
+    "title": "Netflix Survival Analysis",
+    "section": "Summary",
+    "text": "Summary\nThe detailed visual summaries of Netflix user behavior offer critical insights for filmmakers and content creators. The survival analysis reveals how different genres perform in terms of viewer retention and engagement."
+  },
+  {
+    "objectID": "Untitled.io/post-with-code/Netflix Survival.html#key-insights",
+    "href": "Untitled.io/post-with-code/Netflix Survival.html#key-insights",
+    "title": "Netflix Survival Analysis",
+    "section": "Key Insights:",
+    "text": "Key Insights:\nAction: High initial engagement with potential drop-offs; requires sustained pacing.\nHorror: Consistent viewership; benefits from strong suspense.\nThriller: Steady decline; needs continuous suspense and plot twists.\nRomance: Strong retention; driven by emotional engagement.\nAnimation: High retention, especially among younger audiences; relies on visual appeal."
+  },
+  {
+    "objectID": "Untitled.io/post-with-code/Netflix Survival.html#data-analysis",
+    "href": "Untitled.io/post-with-code/Netflix Survival.html#data-analysis",
+    "title": "Netflix Survival Analysis",
+    "section": "Data Analysis:",
+    "text": "Data Analysis:\nThe analysis highlights the importance of genre-specific strategies in content creation.\nIt emphasizes the need for continuous engagement, especially in genres like Action and Thriller.\nRomance and Animation benefit from emotional and visual engagement, respectively."
+  },
+  {
+    "objectID": "Untitled.io/post-with-code/Netflix Survival.html#conclusion",
+    "href": "Untitled.io/post-with-code/Netflix Survival.html#conclusion",
+    "title": "Netflix Survival Analysis",
+    "section": "Conclusion:",
+    "text": "Conclusion:\nUnderstanding viewer behavior through survival analysis enables filmmakers to tailor their content to audience preferences, enhancing engagement and retention. By leveraging these insights, creators can make informed decisions about the types of movies to produce and the target audiences to focus on, ultimately leading to more successful and engaging content on platforms like Netflix."
   }
 ]
