@@ -7,36 +7,36 @@
     "text": "This is a post with executable code.\n\n\nShow the code\n1 + 1\n\n\n[1] 2"
   },
   {
-    "objectID": "posts/post-with-code/bill.html",
-    "href": "posts/post-with-code/bill.html",
+    "objectID": "posts/Billboard Top 100's (2000)/bill.html",
+    "href": "posts/Billboard Top 100's (2000)/bill.html",
     "title": "Billboard Top 100’s in 2000",
     "section": "",
     "text": "This analysis focuses on the Billboard Top 100 chart from the year 2000, particularly examining the #1 hit singles that stayed at the top position the longest. Using data manipulation and visualization techniques in R, we can gain insights into the music trends of that year and identify the most dominant songs and artists."
   },
   {
-    "objectID": "posts/post-with-code/bill.html#libraries-and-data-preparation",
-    "href": "posts/post-with-code/bill.html#libraries-and-data-preparation",
+    "objectID": "posts/Billboard Top 100's (2000)/bill.html#libraries-and-data-preparation",
+    "href": "posts/Billboard Top 100's (2000)/bill.html#libraries-and-data-preparation",
     "title": "Billboard Top 100’s in 2000",
     "section": "Libraries and Data Preparation",
     "text": "Libraries and Data Preparation\nWe start by loading the necessary R libraries for data manipulation, visualization, and analysis.\n\n\nShow the code\nlibrary(tidyverse)   # For data manipulation and visualization\nlibrary(lubridate)   # For date manipulation\nlibrary(skimr)       # For summarizing data\nlibrary(survival)    # For survival analysis (not used in this example)\nlibrary(survminer)   # For visualizing survival analysis (not used in this example)\nlibrary(flextable)   # For creating flexible tables\nlibrary(DT)          # For interactive tables\n\n\nThe billboard dataset is reshaped to gather weekly rankings into a long format, making it easier to filter and analyze the data.\n\n\nShow the code\n# Load the dataset\ndata(\"billboard\", package = \"tidyverse\") # Ensure you have the billboard dataset loaded\nds = billboard\n\n# Reshape the data from wide to long format\nds = billboard %>% gather(key = week, value = rank, wk1:wk76)\n\n# Convert week column to numeric and ensure rank is numeric\nds$week = as.numeric(gsub(\"wk\", \"\", ds$week))\nds$rank = as.numeric(ds$rank)"
   },
   {
-    "objectID": "posts/post-with-code/bill.html#filtering-and-summarizing-data",
-    "href": "posts/post-with-code/bill.html#filtering-and-summarizing-data",
+    "objectID": "posts/Billboard Top 100's (2000)/bill.html#filtering-and-summarizing-data",
+    "href": "posts/Billboard Top 100's (2000)/bill.html#filtering-and-summarizing-data",
     "title": "Billboard Top 100’s in 2000",
     "section": "Filtering and Summarizing Data",
     "text": "Filtering and Summarizing Data\nWe filter the dataset to include only the rows where the song was ranked #1. Then, we group by artist and track to count the number of weeks each song stayed at the top position.\n\n\nShow the code\n# Filter for #1 ranked songs and summarize the duration at #1\nds = ds %>%\n  filter(rank == 1) %>%\n  group_by(artist, track) %>%\n  summarize(weeksAtNumberOne = n()) %>%\n  arrange(desc(weeksAtNumberOne))\n\n# Display the summarized data as a flextable\nas_flextable(ds)\n\n\n\nartisttrackweeksAtNumberOnecharactercharacterintegerDestiny's ChildIndependent Women Pa...11SantanaMaria, Maria10Aguilera, ChristinaCome On Over Baby (A...4MadonnaMusic4Savage GardenI Knew I Loved You4Destiny's ChildSay My Name3Iglesias, EnriqueBe With You3JanetDoesn't Really Matte...3Aguilera, ChristinaWhat A Girl Wants2LonestarAmazed2n: 17\n\n\nWe use the flextable library to create a flexible and visually appealing table that displays the artists and tracks along with the number of weeks they stayed at #1."
   },
   {
-    "objectID": "posts/post-with-code/bill.html#additional-visualizations",
-    "href": "posts/post-with-code/bill.html#additional-visualizations",
+    "objectID": "posts/Billboard Top 100's (2000)/bill.html#additional-visualizations",
+    "href": "posts/Billboard Top 100's (2000)/bill.html#additional-visualizations",
     "title": "Billboard Top 100’s in 2000",
     "section": "Additional Visualizations",
     "text": "Additional Visualizations\n\n\nShow the code\n# Summarize total weeks at #1 for each artist\nartist_summary <- ds %>%\n  group_by(artist) %>%\n  summarize(totalWeeksAtNumberOne = sum(weeksAtNumberOne)) %>%\n  arrange(desc(totalWeeksAtNumberOne))\n\n# Bar chart of top artists by total weeks at #1\nggplot(artist_summary, aes(x = reorder(artist, totalWeeksAtNumberOne), y = totalWeeksAtNumberOne)) +\n  geom_bar(stat = \"identity\", fill = \"steelblue\") +\n  coord_flip() +\n  labs(title = \"Top Artists by Total Weeks at #1 in 2000\", x = \"Artist\", y = \"Total Weeks at #1\") +\n  theme_minimal()\n\n\n\n\n\n\n\nShow the code\n# Histogram of weeks at #1\nggplot(ds, aes(x = weeksAtNumberOne)) +\n  geom_histogram(binwidth = 1, fill = \"darkorange\", color = \"black\") +\n  labs(title = \"Distribution of Weeks at #1\", x = \"Weeks at #1\", y = \"Count of Songs\") +\n  theme_minimal()\n\n\n\n\n\n\n\nShow the code\n# Interactive data table\ndatatable(ds, options = list(pageLength = 10, autoWidth = TRUE),\n          caption = 'Number of Weeks Each Song Stayed at #1 in 2000')"
   },
   {
-    "objectID": "posts/post-with-code/bill.html#conclusion",
-    "href": "posts/post-with-code/bill.html#conclusion",
+    "objectID": "posts/Billboard Top 100's (2000)/bill.html#conclusion",
+    "href": "posts/Billboard Top 100's (2000)/bill.html#conclusion",
     "title": "Billboard Top 100’s in 2000",
     "section": "Conclusion",
     "text": "Conclusion\nThis analysis provides a clear view of the songs that dominated the Billboard Top 100 charts in the year 2000. By identifying the tracks that remained at #1 the longest, we can better understand the music trends and preferences of that time. This type of analysis can be expanded to include other years or additional chart metrics to gain further insights into the evolution of popular music."
