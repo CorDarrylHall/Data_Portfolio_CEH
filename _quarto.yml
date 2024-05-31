@@ -1,0 +1,45 @@
+project:
+  type: website
+  output-dir: docs
+
+python:
+  version: "3.12"
+  path: /Users/cordarrylhall/CorDarrylEHall.github/CorDarrylEHall.github.io/myenv/bin/ipython
+website:
+  navbar:
+    tools:
+      - text: JOmama
+        icon: twitter
+        href: https://twitter.com
+      - icon: activity
+      - text: Interactive Applications
+        menu: 
+          - text: Fertility Rate
+            url:  https://c1fbaz-cordarryl-hall.shinyapps.io/posts/
+          - text: Income
+            url:  https://c1fbaz-cordarryl-hall.shinyapps.io/posts/
+    left:
+      - href: about.qmd
+        text: CorDarryl E. Hall
+    right:
+      - href: Resume.qmd
+      - href: Ref.qmd
+      - href: Resume1.qmd
+        text: Resume
+      - href: Services.qmd
+        text: Services
+      - href: index.qmd
+        text: Portfolio
+
+editor: visual
+
+format:
+  html:
+    css: styles.css
+    mainfont: cursive
+    theme:
+      light: flatly
+      dark: darkly
+    email-obfuscation: javascript
+    code-fold: true
+    code-summary: "Show the code"

@@ -1,0 +1,24 @@
+---
+title: "CorDarryl Hall's Data Portfolio"
+
+listing:
+  type: grid
+  contents: posts
+  categories: true
+  sort-ui: false
+  filter-ui: false
+  image-align: left
+page-layout: article
+title-block-banner: false
+---
+
+```{=html}
+<style>
+nav {
+  background: url("https://www.shutterstock.com/shutterstock/videos/1051248673/preview/stock-footage--d-animated-bar-graphs-and-pie-charts-slick-clean-elegant-white-on-blue-background-great-for.mp4") no-repeat top center fixed;
+  background-size: cover;
+  height: 20vh;
+  width: 100%;
+}
+</style>
+```
