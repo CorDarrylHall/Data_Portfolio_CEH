@@ -1,0 +1,136 @@
+---
+title: "Wine & Feature Engineering"
+image: wine.png
+categories: 
+  - Machine Learning
+  - Data Analysis
+  - Data Science
+  - Feature Engineering
+  - Predictive Modeling
+---
+
+```{=html}
+<style>
+body {
+  font-family: 'Times New Roman', sans-serif;
+  background-color: #f9f9f9;
+  color: #333;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: #999;
+}
+
+nav {
+  background: url("https://www.shutterstock.com/shutterstock/videos/1069623523/preview/stock-footage-melbourne-australia-mar-motorized-moving-shot-of-new-albums-released-in-spotify-app.mp4") no-repeat top center fixed;
+  background-size: cover;
+  height: 20vh;
+  width: 100%;
+}
+
+.panel-tabset {
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  background-color: #fff;
+  padding: 15px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.panel-tabset h3 {
+  margin-top: 0;
+}
+
+.panel-tabset .tab-content {
+  padding: 10px 0;
+}
+</style>
+```
+## Overview
+
+In this analysis, we will generate a comprehensive set of 10 features derived from the wine dataset, which includes the points feature. Through the process of feature engineering, we will select and transform variables to create meaningful features that enhance the predictive power of our model. This involves consolidating similar categories using functions like fct_lump and ensuring that our dataset is clean by removing any rows with missing values. Additionally, we will transform the price variable into its logarithmic form (log(price)) to stabilize the variance and normalize the distribution, facilitating a more effective linear regression model.
+
+```{r setup, message=FALSE, warning=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
+library(tidyverse)
+library(caret)
+library(fastDummies)
+wine = read_rds("/Users/Shared/Data 505/wine.rds")
+```
+
+## Feature Engineering
+
+**Summary**
+
+In this section, we will create a total of 10 features, including the points feature, from the wine dataset. We will also remove all rows that contain any missing values to ensure the data is clean and complete. Finally, we will transform the price into its logarithmic form and ensure that only the log-transformed price (log(price)) and the selected features remain in the final dataframe, which we will call wino.
+
+```{r}
+wino <- wine %>%
+  mutate(lprice = log(price)) %>%
+  mutate(country = fct_lump(country, 5),
+         taster_name = fct_lump(taster_name, 5),
+         variety = fct_lump(variety, 5),
+         winery = fct_lump(winery, 5),
+         region_1 = fct_lump(region_1, 5),
+         province = fct_lump(province, 5),
+         designation = fct_lump(designation, 5)) %>%
+  select(lprice, points, country, taster_name, variety, winery, region_1, province, designation) %>%
+  drop_na()
+
+```
+
+## Model Training with Caret
+
+**Summary**
+
+This section focuses on using the Caret library to partition the wino dataframe into an 80% training set and a 20% test set. We will perform a linear regression with bootstrap resampling and report the Root Mean Squared Error (RMSE) for the model on the test set. The bootstrap method involves resampling with replacement, which helps in estimating the accuracy of the model.
+
+```{r}
+set.seed(504)
+wine_index <- createDataPartition(wino$lprice, p = 0.8, list = FALSE)
+wino_tr <- wino[wine_index, ]
+wino_te <- wino[-wine_index, ]
+
+control <- trainControl(method = "boot", number = 5)
+m1 <- train(lprice ~ ., 
+            data = wino_tr, 
+            method = "lm",
+            trControl = control)
+
+print(m1$resample)
+
+wine_pred <- predict(m1, wino_te)
+postResample(pred = wine_pred, obs = wino_te$lprice)
+
+
+```
+
+## Variable Selection
+
+**Summary**
+
+In this section, we will identify and visualize the importance of the selected features in our model. The goal is to understand which features have the most significant impact on predicting the log-transformed price of the wine.
+
+```{r, warning=FALSE, message=FALSE}
+importance <- varImp(m1, scale = TRUE)
+plot(importance)
+
+
+```
+
+## Data Partition
+
+**Summary**
+
+To ensure reproducibility, we will set the seed to 504 before partitioning the data into training and test sets. We will aim to achieve an RMSE on the test data of less than 0.47 for 1 point, less than 0.46 for 2 points, or less than 0.45 for 3 points. This ensures that the model's performance is both robust and reproducible.
+
+```{r, warning=FALSE, message=FALSE}
+set.seed(504)
+wine_pred <- predict(m1, wino_te)
+postResample(pred = wine_pred, obs = wino_te$lprice)
+
+
+```
+
+## Conclusion:
+
+This presentation demonstrated the process of feature engineering, model training using the Caret library, and evaluating the model's performance. Key steps included creating features, handling missing data, partitioning the dataset, and assessing the model using RMSE. The importance of reproducibility in data partitioning and model evaluation was emphasized through the use of set.seed.

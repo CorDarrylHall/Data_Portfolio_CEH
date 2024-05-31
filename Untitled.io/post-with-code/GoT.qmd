@@ -1,0 +1,193 @@
+---
+title: "Survival Analysis of Game of Thrones Characters"
+image: got.jpeg
+categories: 
+  - Survival Analysis
+  - Game of Thrones
+  - Narrative Analysis
+  - Statistical Modeling
+  - Data Visualization
+  - Cox Proportional Hazards Model
+  - Kaplan-Meier Estimator
+  - Risk Analysis
+  - Storytelling Insights
+  - Plot Dynamics
+  - Thematic Analysis
+---
+
+```{=html}
+<style>
+body {
+  font-family: 'Times New Roman', sans-serif;
+  background-color: #f9f9f9;
+  color: #333;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: #999;
+}
+
+nav {
+  background: url("https://www.shutterstock.com/shutterstock/videos/1069623523/preview/stock-footage-melbourne-australia-mar-motorized-moving-shot-of-new-albums-released-in-spotify-app.mp4") no-repeat top center fixed;
+  background-size: cover;
+  height: 20vh;
+  width: 100%;
+}
+
+.panel-tabset {
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  background-color: #fff;
+  padding: 15px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.panel-tabset h3 {
+  margin-top: 0;
+}
+
+.panel-tabset .tab-content {
+  padding: 10px 0;
+}
+</style>
+```
+This survival analysis was conducted on a Game of Thrones dataset to analyze the expected survival time of characters. The analysis includes visualizing the survival probability by initial allegiance and whether the characters switched allegiances.
+
+## Dataset Overview
+
+The dataset contains information about Game of Thrones characters, including their allegiance, survival time, and whether they switched allegiances.
+
+```{r}
+# Load necessary libraries and dataset
+library(tidyverse)
+library(lubridate)
+library(survival)
+library(survminer)
+
+thePath <- "/Users/Shared/Survival Analysis/Got_dataset"
+ds <- read_csv(paste(thePath, "character_data_S01-S08.csv", sep = "/"))
+
+
+```
+
+## Survival Analysis by Allegiance
+
+### Characters Loyal to Their Allegiances
+
+```{r}
+# Filter data for characters loyal to their allegiances
+character_ds_2_1 <- ds %>%
+  filter(allegiance_switched == 1 & allegiance_last %in% 1:4)
+
+# Fit survival model
+no_switch <- survfit(Surv(character_ds_2_1$exp_time_hrs, character_ds_2_1$dth_flag) ~ character_ds_2_1$allegiance_last)
+
+# Plot survival curves
+surv_loyal <- ggsurvplot(fit = no_switch, data = character_ds_2_1,
+                         legend = "bottom", 
+                         legend.title = "Allegiance",
+                         legend.labs = c("Stark", "Targaryen", "Night's Watch", "Lannister"),
+                         risk.table = F, conf.int = F) +
+              labs(title = "Survival of Characters Loyal to Their Allegiances",
+                   x = "Time in Hours")
+surv_loyal
+
+```
+
+### Characters Not Loyal to Their Allegiances
+
+```{r}
+# Filter data for characters not loyal to their allegiances
+character_swap <- ds %>%
+  filter(allegiance_switched == 2 & allegiance_last %in% 1:4)
+
+# Fit survival model
+switch <- survfit(Surv(character_swap$exp_time_hrs, character_swap$dth_flag) ~ character_swap$allegiance_last)
+
+# Plot survival curves
+surv_not_loyal <- ggsurvplot(fit = switch, data = character_swap,
+                             legend = "bottom", 
+                             legend.title = "Allegiance",
+                             legend.labs = c("Stark", "Targaryen", "Night's Watch", "Lannister"),
+                             risk.table = F, conf.int = F) +
+                  labs(title = "Survival of Characters Not Loyal to Their Allegiances",
+                       x = "Time in Hours")
+surv_not_loyal
+
+```
+
+Comparison of Survival Curves
+
+```{r}
+# Compare survival curves for characters who switched allegiances and those who didn't
+allegiance_switch <- survfit(Surv(ds$exp_time_hrs, ds$dth_flag) ~ ds$allegiance_switched)
+
+# Plot survival curves
+allegiance_switch2 <- ggsurvplot(fit = allegiance_switch, data = ds,
+                                 legend = "bottom", 
+                                 legend.title = "Swapped Allegiance?",
+                                 legend.labs = c("Yes", "No"),
+                                 risk.table = F, conf.int = T) +
+                      labs(title = "Survival Curves for Characters who Swapped/Kept Allegiance",
+                           x = "Time to Death (Hours)")
+allegiance_switch2
+
+```
+
+Overall Survival Curve for Game of Thrones Characters
+
+```{r}
+# Fit overall survival model
+km2 <- survfit(Surv(time = ds$exp_time_hrs, event = ds$dth_flag) ~ 1)
+
+# Plot overall survival curve
+got_surv <- ggsurvplot(fit = km2, data = ds,
+                       legend = "bottom", 
+                       legend.title = "GoT Characters",
+                       risk.table = F, conf.int = F, surv.median.line = "hv") +
+            labs(title = "Survival Curve for Game of Thrones Characters",
+                 x = "Time to Death (Hours)")
+got_surv
+```
+
+## Key Insights & Analysis:
+
+**1. Survival by Allegiance:**
+
+Characters loyal to their allegiances, such as Stark, Targaryen, Night's Watch, and Lannister, tend to have higher survival rates compared to those who switch allegiances.
+
+The survival curves for characters loyal to their allegiances show relatively higher probabilities of survival over time.
+
+**2. Effect of Allegiance Switching:**
+
+Characters who switch allegiances exhibit different survival patterns compared to those who remain loyal.
+
+The survival curves for characters who switched allegiances demonstrate varying probabilities of survival, depending on their new allegiance.
+
+**3. Overall Survival:**
+
+The overall survival curve for Game of Thrones characters provides a comprehensive view of the survival probability across all allegiances.
+
+It showcases the general trend of character survival throughout the series, highlighting critical periods of high mortality.
+
+**4. Comparative Analysis:**
+
+Comparing survival curves between characters who remained loyal and those who switched allegiances offers insights into the impact of allegiance on survival outcomes.
+
+Statistical tests, such as the log-rank test, can be employed to determine significant differences in survival between various allegiance groups.
+
+**5. Character-Specific Analysis:**
+
+Further analysis can be conducted to explore survival patterns for specific characters or character groups, considering factors like gender, age, and storyline involvement.
+
+Examining survival trends for prominent characters can reveal narrative arcs and thematic elements influencing survival outcomes.
+
+**6. Implications for Plot and Storytelling:**
+
+Survival analysis offers a unique perspective on narrative dynamics, character development, and plot progression within the Game of Thrones universe.
+
+Understanding survival patterns can shed light on the storytelling decisions made by authors and the thematic elements driving character fates.
+
+## Conclusion
+
+By combining statistical techniques with narrative analysis, this survival analysis provides valuable insights into the complex world of Game of Thrones, uncovering patterns of allegiance, betrayal, and survival that shape the story's rich tapestry.

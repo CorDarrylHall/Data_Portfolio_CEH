@@ -1,0 +1,104 @@
+---
+title: "Offer Analysis Dashboard"
+
+listing:
+  contents: posts
+  sort: "date desc"
+  type: grid
+  categories: true
+  sort-ui: false
+  filter-ui: false
+page-layout: article
+title-block-banner: false 
+image: Pbi3.png
+categories: 
+  - Power BI
+  - Data Visualization
+  - KPI Analysis
+  - HR Analytics
+  - Employee Retention
+  - Turnover Analysis
+  - Data-Driven Decision Making
+---
+
+```{=html}
+<style>
+body {
+  font-family: 'Times New Roman', sans-serif;
+  background-color: #f9f9f9;
+  color: #333;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: #999;
+}
+
+nav {
+  background: url("https://www.shutterstock.com/shutterstock/videos/1069623523/preview/stock-footage-melbourne-australia-mar-motorized-moving-shot-of-new-albums-released-in-spotify-app.mp4") no-repeat top center fixed;
+  background-size: cover;
+  height: 20vh;
+  width: 100%;
+}
+
+.panel-tabset {
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  background-color: #fff;
+  padding: 15px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.panel-tabset h3 {
+  margin-top: 0;
+}
+
+.panel-tabset .tab-content {
+  padding: 10px 0;
+}
+</style>
+```
+## Offer Analysis Summary
+
+This Power BI Summary is a real-life example that I created for a previous organization. This dashboard was designed to provide an overview of key performance indicators (KPIs) and metrics that were relevant to the organization's goals and objectives.
+
+![](Offer%20Accept%20.png)
+
+### **Offer Accept Ratio:**
+
+**Summary:** This metric measures the acceptance rate of job offers among different specialized groups, calculated monthly.
+
+**Key Insights:** Higher acceptance rates indicate successful alignment between job offers and candidate expectations.
+
+Lower acceptance rates suggest potential areas needing improvement in the recruitment process.
+
+![](Offer%20Decline.png)
+
+### **Offer Decline Ratio:**
+
+**Summary:** This metric tracks the rate at which job offers are declined among different specialized groups, calculated monthly.
+
+**Key Insights:** Helps identify why certain groups decline offers more frequently, such as mismatches between job requirements and candidate skills or issues with compensation packages.
+
+Provides data for proactive adjustments in recruitment strategies.
+
+![](Salarycompete.png)
+
+### **Salary Competitiveness:**
+
+**Summary:** This metric measures how competitive the organization's job offers are compared to the market, based on pay grade and job description/category.
+
+**Key Insights:** A low score indicates the need for salary adjustments to attract top talent.
+
+A high score suggests that the organization's offers are competitive, aiding in talent attraction and retention.
+
+## **Conclusion**
+
+### **Key Takeaways:**
+
+The **Offer Accept Ratio** and **Offer Decline Ratio** metrics offer crucial insights into the recruitment process, highlighting the effectiveness of job offers and areas for improvement.
+
+**Salary Competitiveness** is essential for understanding the organization's position in the job market, ensuring competitive compensation packages.
+
+The interactive dashboard design allows for in-depth analysis and informed decision-making across various organizational facets.
+
+Continuous monitoring of these metrics enables the organization to adapt strategies, enhance performance, improve recruitment efforts, and maintain a competitive edge in the market.

@@ -1,0 +1,135 @@
+---
+title: "Country Migration"
+image: country.jpeg
+categories: 
+  - Data Visualization
+  - Interactive Visualization
+  - Sankey Diagrams
+  - Data Analysis
+  - Data Science
+  - Statistical Analysis
+---
+
+```{=html}
+<style>
+body {
+  font-family: 'Arial Narrow', sans-serif;
+  background-color: #f9f9f9;
+  color: #333;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: #999;
+}
+
+nav {
+  background: url("https://www.shutterstock.com/shutterstock/videos/1069623523/preview/stock-footage-melbourne-australia-mar-motorized-moving-shot-of-new-albums-released-in-spotify-app.mp4") no-repeat top center fixed;
+  background-size: cover;
+  height: 20vh;
+  width: 100%;
+}
+
+.panel-tabset {
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  background-color: #fff;
+  padding: 15px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.panel-tabset h3 {
+  margin-top: 0;
+}
+
+.panel-tabset .tab-content {
+  padding: 10px 0;
+}
+</style>
+```
+This document presents an analysis of the number of people migrating from one country (left) to another (right). The interactive Sankey diagram below visualizes these migration flows, offering insights into the patterns and volume of migration between different countries.
+
+## Overview
+
+```{r}
+library(tidyverse)
+library(viridis)
+library(patchwork)
+library(hrbrthemes)
+library(circlize)
+library(networkD3)
+
+# Load and prepare the data
+data <- read.table("https://raw.githubusercontent.com/holtzy/data_to_viz/master/Example_dataset/13_AdjacencyDirectedWeighted.csv", header=TRUE)
+data_long <- data %>%
+  rownames_to_column() %>%
+  gather(key = 'key', value = 'value', -rowname) %>%
+  filter(value > 0)
+colnames(data_long) <- c("source", "target", "value")
+data_long$target <- paste(data_long$target, " ", sep="")
+
+# Create nodes
+nodes <- data.frame(name=c(as.character(data_long$source), as.character(data_long$target)) %>% unique())
+
+# Create source and target IDs
+data_long$IDsource <- match(data_long$source, nodes$name) - 1
+data_long$IDtarget <- match(data_long$target, nodes$name) - 1
+
+# Define color scale
+ColourScal <- 'd3.scaleOrdinal().range(["#FDE725FF","#B4DE2CFF","#6DCD59FF","#35B779FF","#1F9E89FF","#26828EFF","#31688EFF","#3E4A89FF","#482878FF","#440154FF"])'
+
+# Create the Sankey diagram
+sankeyNetwork(Links = data_long, Nodes = nodes,
+              Source = "IDsource", Target = "IDtarget",
+              Value = "value", NodeID = "name", 
+              sinksRight=FALSE, colourScale=ColourScal, nodeWidth=40, fontSize=13, nodePadding=20)
+
+```
+
+## Key Insights
+
+**Migration Patterns:** Observe which countries are the most common sources and destinations for migrants.
+
+**Volume of Migration:** Identify the countries with the highest number of migrants.
+
+**Regional Trends:** Analyze the regional trends and how migration flows vary between different parts of the world.
+
+## Detailed Analysis
+
+To dive deeper into the data, we use various visualization techniques and data summarizations:
+
+### Migration Flows
+
+```{r}
+# Plot migration flows
+library(ggplot2)
+
+migration_flow <- data_long %>%
+  ggplot(aes(x=source, y=value, fill=target)) +
+  geom_bar(stat="identity") +
+  theme_minimal() +
+  labs(title="Migration Flows by Country", x="Source Country", y="Number of Migrants") +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1))
+
+print(migration_flow)
+```
+
+### Top Migrating Countries
+
+```{r}
+# Summarize top migrating countries
+top_migrating_countries <- data_long %>%
+  group_by(source) %>%
+  summarize(total_migrants = sum(value)) %>%
+  arrange(desc(total_migrants)) %>%
+  head(10)
+
+# Display in a table
+library(DT)
+datatable(top_migrating_countries, options = list(pageLength = 5))
+```
+
+## Conclusion
+
+The migration data reveals significant trends and patterns in global migration. By leveraging data visualization tools, we can uncover valuable insights that help understand the movement of people across countries.
+
+Feel free to explore the interactive elements and delve deeper into the analysis.

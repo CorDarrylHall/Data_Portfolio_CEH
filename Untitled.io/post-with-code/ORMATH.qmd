@@ -1,0 +1,91 @@
+---
+title: "Analysis of Math Students in Oregon"
+image: Math.jpg
+categories: 
+  - Data Science
+  - Data Analysis
+  - Data Visualization
+  - Statistical Analysis
+---
+
+```{=html}
+<style>
+body {
+  font-family: 'Times New Roman', sans-serif;
+  background-color: #f9f9f9;
+  color: #333;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: #999;
+}
+
+nav {
+  background: url("https://www.shutterstock.com/shutterstock/videos/1069623523/preview/stock-footage-melbourne-australia-mar-motorized-moving-shot-of-new-albums-released-in-spotify-app.mp4") no-repeat top center fixed;
+  background-size: cover;
+  height: 20vh;
+  width: 100%;
+}
+
+.panel-tabset {
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  background-color: #fff;
+  padding: 15px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.panel-tabset h3 {
+  margin-top: 0;
+}
+
+.panel-tabset .tab-content {
+  padding: 10px 0;
+}
+</style>
+```
+This analysis is conducted to examine the performance of Math students in the state of Oregon across various demographic factors. By leveraging data visualization and statistical methods, we aim to uncover key insights that can inform educational policy and resource allocation.
+
+```{r}
+library(tidyverse)
+library(lubridate)
+library(skimr)
+library(survival)
+library(survminer)
+library(flextable)
+library(DT)
+```
+
+```{r}
+thePath="/Users/Shared/DATA 501 Datasets"
+ds=read_csv(paste(thePath,"ORmath.csv",sep="/"))
+
+DT::datatable(ds)
+```
+
+## Data Analysis
+
+### **Student Performance by Ethnicity/Student Group:**
+
+**Summary:** This analysis tracks the performance of Math students based on various demographic factors such as ethnicity, gender, and socioeconomic status.
+
+**Key Insights:**
+
+**Identification of High and Low Performing Regions:** By analyzing performance data, regions with significant disparities can be identified, enabling targeted interventions and resource allocation.
+
+**Support for Demographic Groups:** The analysis highlights which demographic groups may require additional support or resources, informing the development of tailored educational programs.
+
+**Regional Disparities:** The identification of regional disparities can guide policy-makers to implement targeted interventions aimed at improving educational outcomes in underperforming areas.
+
+```{r}
+ORmath = read_csv(paste(thePath, "ORmath.csv", sep = "/"))
+
+ORmath %>% 
+  filter(GradeLevel != "All Grades") %>%
+  ggplot(aes(x = StudentGroup, y = PercentProficient)) +
+  geom_boxplot(color = "black", fill = "cyan4") +
+  ggtitle("OR Academic Report Card 2021-2022: Standardized Math Exam") +
+  xlab("Student Group") + 
+  ylab("% Proficient (score of 3 or 4)") +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
+```

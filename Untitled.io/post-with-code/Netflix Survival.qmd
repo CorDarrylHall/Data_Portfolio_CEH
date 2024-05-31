@@ -1,0 +1,214 @@
+---
+title: "Netflix Survival Analysis"
+image: netflix.jpeg
+categories: 
+  - Data Analysis
+  - Content Strategy
+  - Survival Analysis
+  - Data Visualization
+  - Predictive Modeling
+  - Data Science
+  - Audience Segmentation
+---
+
+```{=html}
+<style>
+body {
+  font-family: 'Times New Roman', sans-serif;
+  background-color: #f9f9f9;
+  color: #333;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: #999;
+}
+
+nav {
+  background: url("https://www.shutterstock.com/shutterstock/videos/1069623523/preview/stock-footage-melbourne-australia-mar-motorized-moving-shot-of-new-albums-released-in-spotify-app.mp4") no-repeat top center fixed;
+  background-size: cover;
+  height: 20vh;
+  width: 100%;
+}
+
+.panel-tabset {
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  background-color: #fff;
+  padding: 15px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.panel-tabset h3 {
+  margin-top: 0;
+}
+
+.panel-tabset .tab-content {
+  padding: 10px 0;
+}
+</style>
+```
+This dataset, collected over two years from January 2017 to June 2019, captures the behavior of Netflix users in the UK who opted to have their browser activity tracked. This data, which represents approximately 25% of global traffic activity from laptops and desktops, provides valuable insights into viewing patterns and preferences. The primary goal of this analysis is to understand how filmmakers and creators can determine what movies to produce and which audiences to target.
+
+## Data Preparation
+
+```{r}
+library(tidyverse)
+library(skimr)
+library(survival)
+library(survminer)
+library(fitdistrplus)
+
+thePath="/Users/Shared/Survival Analysis"
+
+df = read_csv(paste(thePath, "vodclickstream_uk_movies_03.csv", sep="/"))
+df2 = read_csv(paste(thePath, "netflix_titles.csv", sep="/"))
+
+# Merging data that contains movie length to normalize watch length
+df <- merge(df, df2, by = "title")
+
+# Data cleaning and preparation
+df <- subset(df, !grepl("Seasons", duration.y)) # Removing seasons
+df$duration.y <- as.numeric(gsub(" min", "", df$duration.y)) # Converting duration to numeric
+df <- subset(df, duration.x > 0) # Removing invalid durations
+
+# Creating columns for analysis
+df <- df %>%
+    mutate(
+        event = ifelse(duration.x > 0, 1, 0),
+        genres = as.factor(genres),
+        minutes_watched = duration.x / 60,
+        perc_movie_watched = minutes_watched / duration.y,
+        is_action = ifelse(grepl('Action', genres), 1, 0),
+        is_adventure = ifelse(grepl('Adventure', genres), 1, 0),
+        is_comedy = ifelse(grepl('Comedy', genres), 1, 0),
+        is_documentary = ifelse(grepl('Documentary', genres), 1, 0),
+        is_drama = ifelse(grepl('Drama', genres), 1, 0),
+        is_horror = ifelse(grepl('Horror', genres), 1, 0),
+        is_thriller = ifelse(grepl('Thriller', genres), 1, 0),
+        is_romance = ifelse(grepl('romance', genres), 1, 0),
+        is_animation = ifelse(grepl('animation', genres), 1, 0),
+        is_crime = ifelse(grepl('Crime', genres), 1, 0),
+        is_scifi = ifelse(grepl('Sci-Fi', genres), 1, 0),
+        is_sport = ifelse(grepl('Sport', genres), 1, 0),
+        is_musical = ifelse(grepl('musical', genres), 1, 0),
+        is_fantasy = ifelse(grepl('Fantasy', genres), 1, 0),
+        is_mystery = ifelse(grepl('Mystery', genres), 1, 0),
+        is_biography = ifelse(grepl('Biography', genres), 1, 0),
+        is_history = ifelse(grepl('History', genres), 1, 0),
+        is_war = ifelse(grepl('War', genres), 1, 0),
+        is_western = ifelse(grepl('Western', genres), 1, 0),
+        is_short = ifelse(grepl('Short', genres), 1, 0)
+    )
+
+# Cleaning up the percentage of the movie watched
+df$perc_movie_watched_clean <- round(ifelse(df$perc_movie_watched > 1, 1, df$perc_movie_watched), 2)
+
+```
+
+## Key Insights and Analysis
+
+To understand viewing patterns across different genres, survival analysis was employed. The survival curves represent the probability of users continuing to watch a movie over time, segmented by genre. Here are the insights and analyses for some key genres:
+
+### **Action Movies:**
+
+```{r}
+survobj <- Surv(df$perc_movie_watched_clean, df$event)
+fit_action <- survfit(survobj~is_action, data = df)
+ggsurvplot(fit=fit_action, data=df, risk.table = F, conf.int=T) +
+    labs(
+        title="Netflix Movie Genre Survival Curve - Action",
+        x="Watch Length (Minutes)") 
+surv_median(fit_action)
+```
+
+**Insight:** Action movies tend to have high initial engagement but may see a drop-off in viewership as the movie progresses.
+
+**Analysis:** Filmmakers should focus on maintaining high-paced, engaging content throughout the movie to retain viewers.
+
+### **Horror Movies:**
+
+```{r}
+fit_horror <- survfit(survobj~is_horror, data = df)
+ggsurvplot(fit=fit_horror, data=df, risk.table = F, conf.int=T, surv.median.line = 'hv') +
+    labs(
+        title="Netflix Movie Genre Survival Curve - Horror",
+        x="Watch Length (Minutes)") 
+surv_median(fit_horror)
+```
+
+**Insight:** Horror movies have a consistent viewership curve, indicating a dedicated audience.
+
+**Analysis:** This genre benefits from strong, suspenseful storytelling that keeps viewers engaged from start to finish.
+
+### **Thriller Movies:**
+
+```{r}
+fit_thriller <- survfit(survobj~is_thriller, data = df)
+ggsurvplot(fit=fit_thriller, data=df, risk.table = F, conf.int=T, surv.median.line = 'hv') +
+    labs(
+        title="Netflix Movie Genre Survival Curve - Thriller",
+        x="Watch Length (Minutes)") 
+surv_median(fit_thriller)
+```
+
+**Insight:** Thriller movies show a steady decline in viewership over time.
+
+**Analysis:** Thrillers need to maintain suspense and plot twists to keep the audience engaged.
+
+### **Romance Movies:**
+
+```{r}
+fit_romance <- survfit(survobj~is_romance, data = df)
+ggsurvplot(fit=fit_romance, data=df, risk.table = F, conf.int=T, surv.median.line = 'hv') +
+    labs(
+        title="Netflix Movie Genre Survival Curve - Romance",
+        x="Watch Length (Minutes)") 
+surv_median(fit_romance)
+```
+
+**Insight:** Romance movies tend to retain a significant portion of their audience throughout the film.
+
+**Analysis:** Emotional engagement and character development are key to keeping viewers invested.
+
+### **Animation Movies:**
+
+```{r}
+fit_animation <- survfit(survobj~is_animation, data = df)
+ggsurvplot(fit=fit_animation, data=df, risk.table = F, conf.int=T, surv.median.line = 'hv') +
+    labs(
+        title="Netflix Movie Genre Survival Curve - Animation",
+        x="Watch Length (Minutes)") 
+surv_median(fit_animation)
+```
+
+**Insight:** Animation movies have high retention rates, particularly among younger audiences.
+
+**Analysis:** Visual appeal and engaging storylines are crucial for maintaining viewer interest in animation.
+
+## Summary
+
+The detailed visual summaries of Netflix user behavior offer critical insights for filmmakers and content creators. The survival analysis reveals how different genres perform in terms of viewer retention and engagement.
+
+## Key Insights:
+
+**Action:** High initial engagement with potential drop-offs; requires sustained pacing.
+
+**Horror:** Consistent viewership; benefits from strong suspense.
+
+**Thriller:** Steady decline; needs continuous suspense and plot twists.
+
+**Romance:** Strong retention; driven by emotional engagement.
+
+**Animation:** High retention, especially among younger audiences; relies on visual appeal.
+
+## Data Analysis:
+
+The analysis highlights the importance of genre-specific strategies in content creation.
+
+It emphasizes the need for continuous engagement, especially in genres like **Action and Thriller**.
+
+**Romance and Animation** benefit from emotional and visual engagement, respectively.
+
+## Conclusion:
+
+Understanding viewer behavior through survival analysis enables filmmakers to tailor their content to audience preferences, enhancing engagement and retention. By leveraging these insights, creators can make informed decisions about the types of movies to produce and the target audiences to focus on, ultimately leading to more successful and engaging content on platforms like Netflix.

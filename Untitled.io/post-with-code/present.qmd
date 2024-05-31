@@ -1,0 +1,56 @@
+---
+title: "Business Intelligence & Automated Solutions?"
+image: ken.png
+categories: 
+  - Data Analytics
+  - Business Strategy
+  - Technical Expertise
+  - Data Visualization
+  - Leadership Skills
+  - Management Skills
+  - Strategic Thinking
+  - Problem Solving
+  - Program Management
+  - Project Management
+  - Subscriber Segmentation
+  - Content Creation
+  - YouTube Analytics
+format: 
+  revealjs:
+    theme: serif
+    scrollable: true
+    preview-links: true
+---
+
+::: panel-accordion
+### Overview
+
+Hello, I am CorDarryl Hall, a Senior Business Analyst/Program Manager. Here are some of my favorite aspects of this role:
+
+-   **Working with Data Analytics:** I provide insights into the company's operations through data mining, data modeling, data visualization, and related areas, leveraging my strong background in data analytics.
+-   **Discussing Business Strategy:** I align my department's goals with the broader business strategy, which involves significant cross-functional collaboration and the opportunity to contribute to the company's strategic direction.
+-   **Utilizing Industry Knowledge:** By staying abreast of industry-specific trends and challenges, I offer valuable insights to the company through innovative channels.
+
+### CorDarryl's Strengths
+
+-   **Technical Expertise:** I have extensive experience in data mining, data modeling, data visualization, and data analysis. Additionally, I am familiar with data warehousing, data integration, and data governance concepts.
+-   **Business Acumen & Communication Skills:** I take the time to understand the organization's goals, objectives, and key performance indicators. I translate business needs into data-driven solutions and communicate complex technical information to non-technical stakeholders clearly and concisely. I have created several easy-to-understand and actionable reporting dashboards.
+-   **Leadership and Management Skills:** I have experience managing teams and leading projects. I have led small teams of data analysts, data scientists, and business analysts, ensuring that their work aligns with the organization's goals.
+-   **Strategic Thinking:** I possess a strategic mindset, anticipating the organization's future needs. I continuously identify opportunities for improvement and make data-driven recommendations to drive growth.
+-   **Problem-Solving Skills:** I excel at identifying and solving complex business problems using data. I can detect data patterns and trends that help the organization make informed decisions.
+-   **Program Management Skills:** I have managed programs from start to finish, defining project goals, scope, timelines, and budgets, and ensuring that projects are delivered on time and within budget.
+
+### Other Projects
+
+**Ken Jee (YouTuber/Data Scientist) Subscriber Segmentation Project** [Preview](https://prezi.com/view/1HsJCohA0HNqoRKhprAj/){preview-link="true"}
+
+Please Note: To view Project, you will need access to Prezi.
+
+**Purpose:** This project involved analyzing the subscriber segmentation dataset behind Ken Jee's YouTube channel. After researching and analyzing the dataset, I helped answer the following questions:
+
+-   **Where are most of your subscribers located?** Focus on creating more content for these regions.
+-   **What topics interest these subscribers the most?** Continue creating content in these areas.
+-   **How long are users watching these videos?** Determine whether to create shorter or longer videos.
+
+Check out the content to learn more about Ken Jee and his subscribers.
+:::

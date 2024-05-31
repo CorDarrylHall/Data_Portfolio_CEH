@@ -1,0 +1,133 @@
+---
+title: "Billboard Top 100's in 2000"
+image: bill.jpeg
+categories:
+  - Time Series Analysis
+  - Data Analysis
+  - Data Science
+  - Data Visualization
+  - Trend Analysis
+---
+
+```{=html}
+<style>
+body {
+  font-family: 'Times New Roman', sans-serif;
+  background-color: #f9f9f9;
+  color: #333;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: #999;
+}
+
+nav {
+  background: url("https://www.shutterstock.com/shutterstock/videos/1069623523/preview/stock-footage-melbourne-australia-mar-motorized-moving-shot-of-new-albums-released-in-spotify-app.mp4") no-repeat top center fixed;
+  background-size: cover;
+  height: 20vh;
+  width: 100%;
+}
+
+.panel-tabset {
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  background-color: #fff;
+  padding: 15px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.panel-tabset h3 {
+  margin-top: 0;
+}
+
+.panel-tabset .tab-content {
+  padding: 10px 0;
+}
+</style>
+```
+## Overview
+
+This analysis focuses on the Billboard Top 100 chart from the year 2000, particularly examining the #1 hit singles that stayed at the top position the longest. Using data manipulation and visualization techniques in R, we can gain insights into the music trends of that year and identify the most dominant songs and artists.
+
+## Libraries and Data Preparation
+
+We start by loading the necessary R libraries for data manipulation, visualization, and analysis.
+
+```{r, warning=FALSE, message=FALSE}
+library(tidyverse)   # For data manipulation and visualization
+library(lubridate)   # For date manipulation
+library(skimr)       # For summarizing data
+library(survival)    # For survival analysis (not used in this example)
+library(survminer)   # For visualizing survival analysis (not used in this example)
+library(flextable)   # For creating flexible tables
+library(DT)          # For interactive tables
+```
+
+The billboard dataset is reshaped to gather weekly rankings into a long format, making it easier to filter and analyze the data.
+
+```{r, warning=FALSE, message=FALSE}
+# Load the dataset
+data("billboard", package = "tidyverse") # Ensure you have the billboard dataset loaded
+ds = billboard
+
+# Reshape the data from wide to long format
+ds = billboard %>% gather(key = week, value = rank, wk1:wk76)
+
+# Convert week column to numeric and ensure rank is numeric
+ds$week = as.numeric(gsub("wk", "", ds$week))
+ds$rank = as.numeric(ds$rank)
+
+```
+
+## Filtering and Summarizing Data
+
+We filter the dataset to include only the rows where the song was ranked #1. Then, we group by artist and track to count the number of weeks each song stayed at the top position.
+
+```{r, warning=FALSE, message=FALSE}
+# Filter for #1 ranked songs and summarize the duration at #1
+ds = ds %>%
+  filter(rank == 1) %>%
+  group_by(artist, track) %>%
+  summarize(weeksAtNumberOne = n()) %>%
+  arrange(desc(weeksAtNumberOne))
+
+# Display the summarized data as a flextable
+as_flextable(ds)
+```
+
+We use the flextable library to create a flexible and visually appealing table that displays the artists and tracks along with the number of weeks they stayed at #1.
+
+## Additional Visualizations
+
+```{r, warning=FALSE, message=FALSE}
+# Summarize total weeks at #1 for each artist
+artist_summary <- ds %>%
+  group_by(artist) %>%
+  summarize(totalWeeksAtNumberOne = sum(weeksAtNumberOne)) %>%
+  arrange(desc(totalWeeksAtNumberOne))
+
+# Bar chart of top artists by total weeks at #1
+ggplot(artist_summary, aes(x = reorder(artist, totalWeeksAtNumberOne), y = totalWeeksAtNumberOne)) +
+  geom_bar(stat = "identity", fill = "steelblue") +
+  coord_flip() +
+  labs(title = "Top Artists by Total Weeks at #1 in 2000", x = "Artist", y = "Total Weeks at #1") +
+  theme_minimal()
+```
+
+```{r, warning=FALSE, message=FALSE}
+# Histogram of weeks at #1
+ggplot(ds, aes(x = weeksAtNumberOne)) +
+  geom_histogram(binwidth = 1, fill = "darkorange", color = "black") +
+  labs(title = "Distribution of Weeks at #1", x = "Weeks at #1", y = "Count of Songs") +
+  theme_minimal()
+```
+
+```{r, warning=FALSE, message=FALSE}
+# Interactive data table
+datatable(ds, options = list(pageLength = 10, autoWidth = TRUE),
+          caption = 'Number of Weeks Each Song Stayed at #1 in 2000')
+```
+
+## Conclusion
+
+This analysis provides a clear view of the songs that dominated the Billboard Top 100 charts in the year 2000. By identifying the tracks that remained at #1 the longest, we can better understand the music trends and preferences of that time. This type of analysis can be expanded to include other years or additional chart metrics to gain further insights into the evolution of popular music.
